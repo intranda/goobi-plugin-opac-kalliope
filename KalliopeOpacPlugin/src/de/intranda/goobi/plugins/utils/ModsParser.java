@@ -54,14 +54,19 @@ public class ModsParser {
      * @param modsMappingFile The file containing the rules for mapping mods to goobi
      * @param pluginConfig The config for this plugin
      * @param anchorMetadataList The list of metadata to write in the anchor DocStruct, or null if all Metadata should be written to anchor
+     * @throws ParserException 
      * @throws IOException
      * @throws JDOMException
      */
-    public ModsParser(Prefs prefs, File modsMappingFile, Configuration pluginConfig, List<String> anchorMetadataList) throws JDOMException, IOException {
+    public ModsParser(Prefs prefs, File modsMappingFile, Configuration pluginConfig, List<String> anchorMetadataList) throws ParserException {
         this.prefs = prefs;
         this.anchorMetadataList = anchorMetadataList;
         this.pluginConfiguration = pluginConfig;
-        mapDoc = new SAXBuilder().build(modsMappingFile);
+        try {
+            mapDoc = new SAXBuilder().build(modsMappingFile);
+        } catch (JDOMException | IOException e) {
+           throw new ParserException(e);
+        }
         fillPersonRoleMap();
     }
 
@@ -199,6 +204,7 @@ public class ModsParser {
             String value = null;
             if (objValue instanceof Element) {
                 Element eleValue = (Element) objValue;
+                
                 logger.debug("mdType: " + mdType.getName() + "; Value: " + eleValue.getTextTrim());
                 value = getElementValue(eleValue, ", ");
                 //                                      value = eleValue.getTextTrim();

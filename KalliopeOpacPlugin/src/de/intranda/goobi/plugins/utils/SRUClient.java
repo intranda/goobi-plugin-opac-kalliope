@@ -77,7 +77,7 @@ public class SRUClient {
                 URI url = new URI("http", null, cat.getAddress(), cat.getPort(), "/" + cat.getDatabase(), urlBuilder.toString(), null);
                 urlString = url.toString();            
             } catch (URISyntaxException e) {
-                throw new SRUClientException(e.getMessage());
+                throw new SRUClientException(e);
             }
             logger.debug("SRU URL: " + urlString);
             

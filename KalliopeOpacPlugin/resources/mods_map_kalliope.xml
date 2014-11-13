@@ -54,6 +54,10 @@
         <name>location</name>
         <xpath>/mods:mods/mods:location</xpath>
     </metadata>
+    <metadata physical="true" logical="true">
+        <name>shelfmarksource</name>
+        <xpath>/mods:mods/mods:location/mods:shelfLocator</xpath>
+    </metadata>
     <metadata logical="true">
         <name>SizeSourcePrint</name>
         <xpath>/mods:mods/mods:physicalDescription/mods:extent</xpath>
@@ -70,6 +74,8 @@
     <metadata logical="true">
         <name>DocLanguage</name>
         <xpath>/mods:mods/mods:language/mods:languageTerm[@type='code'][@authority='iso639-2b']
+        </xpath>
+        <xpath>/mods:mods/mods:languageOfCataloging/mods:languageTerm[@authority='iso639-2b']
         </xpath>
     </metadata>
     <metadata logical="true">
@@ -115,6 +121,7 @@
         <name>PlaceOfPublication</name>
         <xpath>/mods:mods/mods:originInfo[not(@displayLabel)]/mods:place/mods:placeTerm[@type='text']
         </xpath>
+        <xpath>/mods:mods/mods:originInfo[not(@displayLabel)]/mods:place</xpath>
     </metadata>
     <metadata logical="true">
         <name>DateOfManufacture</name>
@@ -315,7 +322,58 @@
                 <roleTerm>redactor</roleTerm>
                 <roleTerm>red</roleTerm>
             </person>
+                        <person>
+                <name>Addressee</name>
+                <roleTerm>addressee</roleTerm>
+                <roleTerm>rcp</roleTerm>
+            </person>
+                        <person>
+                <name>Corresondent</name>
+                <roleTerm>correspondent</roleTerm>
+                <roleTerm>crp</roleTerm>
+            </person>
+                        <person>
+                <name>Signer</name>
+                <roleTerm>signer</roleTerm>
+                <roleTerm>sgn</roleTerm>
+            </person>
+                        <person>
+                <name>OtherPerson</name>
+                <roleTerm>other</roleTerm>
+                <roleTerm>oth</roleTerm>
+            </person>
+                        <person>
+                <name>AuthorPrePostface</name>
+                <roleTerm>aft</roleTerm>
+                <roleTerm>aui</roleTerm>
+                <roleTerm>wpr</roleTerm>
+            </person>
         </roleMapping>
+    </metadata>
+    <metadata logical="true" separateOccurances="true" separateXPaths="true">
+        <name>Author_corporate</name>
+        <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='creator']</xpath>
+        <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='author']</xpath>
+    </metadata>
+        <metadata logical="true" separateOccurances="true" separateXPaths="true">
+        <name>Addressee_corporate</name>
+        <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='addressee']</xpath>
+    </metadata>
+        <metadata logical="true" separateOccurances="true" separateXPaths="true">
+        <name>Correspondent_corporate</name>
+        <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='correspondent']</xpath>
+    </metadata>
+        <metadata logical="true" separateOccurances="true" separateXPaths="true">
+        <name>OtherCorporate</name>
+        <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='other']</xpath>
+    </metadata>
+        <metadata logical="true" separateOccurances="true" separateXPaths="true">
+        <name>SubjectCorporate</name>
+        <xpath>/mods:mods/mods:subject/mods:name[@type='corporate']</xpath>
+    </metadata>
+    <metadata logical="true" separateOccurances="true" separateXPaths="true">
+        <name>SubjectPerson</name>
+        <xpath>/mods:mods/mods:subject/mods:name[@type='personal']</xpath>
     </metadata>
     <metadata logical="true">
         <name>Manufacturer</name>
@@ -350,12 +408,6 @@
     <metadata logical="true">
         <name>StatementOfResponsibility</name>
         <xpath>/mods:mods/mods:note[@type='statement of responsibility']
-        </xpath>
-    </metadata>
-    <metadata logical="true" separator=", ">
-        <name>Corporation</name>
-        <xpath>/mods:mods/mods:name[@type='corporate']</xpath>
-        <xpath>/mods:mods/mods:name[@type='corporate']/mods:role/mods:roleTerm
         </xpath>
     </metadata>
     <metadata logical="true">

@@ -35,6 +35,7 @@ import org.goobi.production.enums.PluginType;
 import org.goobi.production.plugin.interfaces.IOpacPlugin;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
 import org.jdom2.filter.Filters;
 
 import ugh.dl.DigitalDocument;
@@ -47,10 +48,12 @@ import ugh.dl.Prefs;
 import ugh.exceptions.PreferencesException;
 import ugh.exceptions.TypeNotAllowedAsChildException;
 import ugh.exceptions.TypeNotAllowedForParentException;
+import ugh.exceptions.UGHException;
 import ugh.fileformats.mets.MetsMods;
 import de.intranda.goobi.plugins.utils.ModsParser;
 import de.intranda.goobi.plugins.utils.ModsParser.ParserException;
 import de.intranda.goobi.plugins.utils.SRUClient;
+import de.intranda.goobi.plugins.utils.SRUClient.SRUClientException;
 import de.intranda.utils.DocumentUtils;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.config.ConfigurationHelper;
@@ -85,46 +88,47 @@ public class KalliopeOpacImport implements IOpacPlugin {
         this.config = config;
         init();
     }
-    
+
     private void init() throws ImportPluginException {
         this.inputEncoding = config.getString("charset", "utf-8");
         String mappingPath = config.getString("mapping", "mods_map_kalliope.xml");
-        if(mappingPath.startsWith("/")) {
+        if (mappingPath.startsWith("/")) {
             mappingFile = new File(mappingPath);
         } else {
             mappingFile = new File(ConfigurationHelper.getInstance().getXsltFolder(), mappingPath);
         }
-        if(!mappingFile.isFile()) {
+        if (!mappingFile.isFile()) {
             throw new ImportPluginException("Cannot locate mods mapping file " + mappingFile.getAbsolutePath());
         }
         defaultDocType = config.getString("defaultDocType", "ArchiveDocument");
     }
 
     @Override
-    public Fileformat search(String inSuchfeld, String inSuchbegriff, ConfigOpacCatalogue catalogue, Prefs inPrefs) throws Exception {
+    public Fileformat search(String inSuchfeld, String inSuchbegriff, ConfigOpacCatalogue catalogue, Prefs inPrefs) throws ImportPluginException {
         return retrieveFileformat(inSuchfeld, inSuchbegriff, catalogue, inPrefs);
     }
 
-    protected Fileformat retrieveFileformat(String inSuchfeld, String inSuchbegriff, ConfigOpacCatalogue catalogue, Prefs inPrefs) throws Exception {
+    protected Fileformat retrieveFileformat(String inSuchfeld, String inSuchbegriff, ConfigOpacCatalogue catalogue, Prefs inPrefs)
+            throws ImportPluginException {
         this.coc = catalogue;
         this.prefs = inPrefs;
         Fileformat ff = null;
         String recordSchema = "mods";
-        String answer = SRUClient.querySRU(catalogue, inSuchfeld + "=" + inSuchbegriff, recordSchema);
 
-        Document wholeDoc = DocumentUtils.getDocumentFromString(answer, this.inputEncoding);
-
-        List<Element> records = getModsRecords(wholeDoc);
-
-        hitcount = records.size();
-        if (hitcount < 1) {
-            throw new Exception("Unable to find record");
-        }
-
-        List<String> anchorMetadataList = new ArrayList<String>();
-
-        Element recordElement = records.get(0);
         try {
+            String answer = SRUClient.querySRU(catalogue, inSuchfeld + "=" + inSuchbegriff, recordSchema);
+            List<Element> records = getModsRecords(answer, this.inputEncoding);
+            
+            hitcount = records.size();
+            if (hitcount < 1) {
+                throw new ImportPluginException("Unable to find record");
+            } else if (hitcount > 1) {
+                throw new ImportPluginException("Query ambigious: Found more than one record");
+            }
+
+            List<String> anchorMetadataList = new ArrayList<String>();
+
+            Element recordElement = records.get(0);
             ModsParser parser = new ModsParser(inPrefs, mappingFile, config, anchorMetadataList);
             Element typeOfResourceElement = parser.getTypeOfResource(recordElement);
             ff = createEmptyFileformat(inPrefs, typeOfResourceElement);
@@ -139,11 +143,11 @@ public class KalliopeOpacImport implements IOpacPlugin {
                 attachToAnchor(ff.getDigitalDocument(), aff);
             }
             createAtstsl(ff.getDigitalDocument());
-
-        } catch (ParserException e) {
+            return ff;
+        } catch (SRUClientException | UGHException | ParserException e) {
             logger.error(e);
+            throw new ImportPluginException("Failed to create fileformat: " + e.getMessage());
         }
-        return ff;
     }
 
     /**
@@ -192,33 +196,33 @@ public class KalliopeOpacImport implements IOpacPlugin {
      * @throws PreferencesException
      */
     private Fileformat createEmptyFileformat(Prefs inPrefs, Element typeOfResourceElement) throws PreferencesException {
-       
+
         //create base structures
         Fileformat ff = new MetsMods(inPrefs);
         DigitalDocument dd = new DigitalDocument();
         ff.setDigitalDocument(dd);
         String dsName = defaultDocType;
-//        String anchorName = null;
+        //        String anchorName = null;
         String boundBookName = "BoundBook";
 
         //evaluate element
-//        if (typeOfResourceElement != null) {
-//
-//            boolean isManuscript = "yes".equals(typeOfResourceElement.getAttributeValue("manuscript").toLowerCase());
-//
-//            if (isManuscript) {
-//                dsName = "Manuscript";
-//            }
-//
-//        }
+        //        if (typeOfResourceElement != null) {
+        //
+        //            boolean isManuscript = "yes".equals(typeOfResourceElement.getAttributeValue("manuscript").toLowerCase());
+        //
+        //            if (isManuscript) {
+        //                dsName = "Manuscript";
+        //            }
+        //
+        //        }
 
         //create docTypes
         DocStructType physType = inPrefs.getDocStrctTypeByName(boundBookName);
         DocStructType dsType = inPrefs.getDocStrctTypeByName(dsName);
-//        DocStructType anchorType = null;
-//        if (anchorName != null) {
-//            anchorType = inPrefs.getDocStrctTypeByName(anchorName);
-//        }
+        //        DocStructType anchorType = null;
+        //        if (anchorName != null) {
+        //            anchorType = inPrefs.getDocStrctTypeByName(anchorName);
+        //        }
 
         //create structure
         if (dsType != null) {
@@ -226,13 +230,13 @@ public class KalliopeOpacImport implements IOpacPlugin {
                 DocStruct physStruct = ff.getDigitalDocument().createDocStruct(physType);
                 ff.getDigitalDocument().setPhysicalDocStruct(physStruct);
                 DocStruct ds = ff.getDigitalDocument().createDocStruct(dsType);
-//                if (anchorType != null) {
-//                    DocStruct dsAnchor = ff.getDigitalDocument().createDocStruct(anchorType);
-//                    dsAnchor.addChild(ds);
-//                    ff.getDigitalDocument().setLogicalDocStruct(dsAnchor);
-//                } else {
-                    ff.getDigitalDocument().setLogicalDocStruct(ds);
-//                }
+                //                if (anchorType != null) {
+                //                    DocStruct dsAnchor = ff.getDigitalDocument().createDocStruct(anchorType);
+                //                    dsAnchor.addChild(ds);
+                //                    ff.getDigitalDocument().setLogicalDocStruct(dsAnchor);
+                //                } else {
+                ff.getDigitalDocument().setLogicalDocStruct(ds);
+                //                }
             } catch (TypeNotAllowedForParentException e) {
                 throw new PreferencesException(e.getMessage());
             }
@@ -242,15 +246,20 @@ public class KalliopeOpacImport implements IOpacPlugin {
         return ff;
     }
 
-    private List<Element> getModsRecords(Document wholeDoc) {
-        Element root = wholeDoc.getRootElement();
-        //        System.out.println(DocumentUtils.getStringFromDocument(wholeDoc, "utf-8"));
-        Iterator<Element> iterator = root.getDescendants(Filters.element("mods", ModsParser.NS_MODS));
-        List<Element> modsElements = new ArrayList<Element>();
-        while (iterator.hasNext()) {
-            modsElements.add(iterator.next());
+    private List<Element> getModsRecords(String queryRespponse, String encoding) throws ImportPluginException {
+        try {
+            Document wholeDoc = DocumentUtils.getDocumentFromString(queryRespponse, encoding);
+            Element root = wholeDoc.getRootElement();
+            //        System.out.println(DocumentUtils.getStringFromDocument(wholeDoc, "utf-8"));
+            Iterator<Element> iterator = root.getDescendants(Filters.element("mods", ModsParser.NS_MODS));
+            List<Element> modsElements = new ArrayList<Element>();
+            while (iterator.hasNext()) {
+                modsElements.add(iterator.next());
+            }
+            return modsElements;
+        } catch (JDOMException | IOException e) {
+            throw new ImportPluginException(e);
         }
-        return modsElements;
     }
 
     /**
