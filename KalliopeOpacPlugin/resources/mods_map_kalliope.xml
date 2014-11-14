@@ -365,10 +365,16 @@
         <name>Correspondent_corporate</name>
         <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='correspondent']</xpath>
     </metadata>
-        <metadata logical="true" separateOccurances="true" separateXPaths="true">
+    <metadata logical="true" separateOccurances="true" separateXPaths="true">
         <name>OtherCorporate</name>
         <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='other']</xpath>
         <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='otherroles']</xpath>
+    </metadata>
+   <metadata logical="true" separateOccurances="false" separateXPaths="false" separator="; ">
+        <name>CreatorsAllOrigin</name>
+        <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='author']</xpath>
+        <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='creator']</xpath>
+        <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='correspondent']</xpath>
     </metadata>
         <metadata logical="true" separateOccurances="true" separateXPaths="true">
         <name>SubjectCorporate</name>
