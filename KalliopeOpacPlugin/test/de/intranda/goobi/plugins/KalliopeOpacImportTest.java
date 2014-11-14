@@ -47,7 +47,8 @@ public class KalliopeOpacImportTest {
         KalliopeOpacImport importer = new KalliopeOpacImport();
         
         String inSuchfeld = "ead.title";
-        String inSuchbegriff = "Katalog des Musikhistorischen Museums";
+        String inSuchbegriff = "Auflistung über Neuernannte ausserordentliche Mitglieder von 1919";
+//        String inSuchbegriff = "Katalog des Musikhistorischen Museums";
         try {
             Fileformat ff = importer.retrieveFileformat(inSuchfeld, inSuchbegriff, catalogue, prefs);
             System.out.println(ff.getDigitalDocument());

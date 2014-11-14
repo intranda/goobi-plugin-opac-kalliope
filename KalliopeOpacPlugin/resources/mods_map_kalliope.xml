@@ -71,7 +71,7 @@
         <xpath>/mods:mods/mods:note[@type='additional physical form']
         </xpath>
     </metadata>
-    <metadata logical="true">
+    <metadata logical="true" mergeXPathInstances="true" separator=", " ignoreRegex=",.*">
         <name>DocLanguage</name>
         <xpath>/mods:mods/mods:language/mods:languageTerm[@type='code'][@authority='iso639-2b']
         </xpath>
@@ -145,7 +145,7 @@
         <xpath>/mods:mods/mods:accessOptions
         </xpath>
     </metadata>
-    <metadata logical="true">
+    <metadata logical="true" ignoreRegex="[\[\(](.+?)[\]\)]">
         <name>Author</name>
         <xpath>/mods:mods/mods:name[@type='personal']
         </xpath>
@@ -352,12 +352,12 @@
             </person>
         </roleMapping>
     </metadata>
-    <metadata logical="true" separateOccurances="true" separateXPaths="true">
+    <metadata logical="true" separateOccurances="true" separateXPaths="true" ignoreRegex="[\[](.+?)[\]]">
         <name>Author_corporate</name>
         <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='creator']</xpath>
         <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='author']</xpath>
     </metadata>
-        <metadata logical="true" separateOccurances="true" separateXPaths="true">
+        <metadata logical="true" separateOccurances="true" separateXPaths="true" ignoreRegex="[\[](.+?)[\]]">
         <name>Addressee_corporate</name>
         <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='addressee']</xpath>
     </metadata>
@@ -368,6 +368,7 @@
         <metadata logical="true" separateOccurances="true" separateXPaths="true">
         <name>OtherCorporate</name>
         <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='other']</xpath>
+        <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='otherroles']</xpath>
     </metadata>
         <metadata logical="true" separateOccurances="true" separateXPaths="true">
         <name>SubjectCorporate</name>

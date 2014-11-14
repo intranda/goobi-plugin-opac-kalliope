@@ -21,10 +21,12 @@
 package de.intranda.goobi.plugins.utils;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
@@ -67,20 +69,25 @@ public class SRUClient {
         if (cat != null) {
             String urlString;
             try {
+                query = URLEncoder.encode(query, "utf-8");
                 StringBuilder urlBuilder = new StringBuilder();
+                urlBuilder.append("http://");
+                urlBuilder.append(cat.getAddress());
+                urlBuilder.append(":" + cat.getPort());
+                urlBuilder.append("/" + cat.getDatabase());                   
                 urlBuilder.append("?version=1.2");
                 urlBuilder.append("&operation=searchRetrieve");
                 urlBuilder.append("&query=" + query);
                 urlBuilder.append("&maximumRecords=100");
                 urlBuilder.append("&recordSchema=" + recordSchema);
-                
-                URI url = new URI("http", null, cat.getAddress(), cat.getPort(), "/" + cat.getDatabase(), urlBuilder.toString(), null);
-                urlString = url.toString();            
-            } catch (URISyntaxException e) {
+                urlString = urlBuilder.toString();
+//                URI url = new URI("http", null, cat.getAddress(), cat.getPort(), "/" + cat.getDatabase(), urlBuilder.toString(), null);
+//                urlString = url.toString();     
+//                urlString = URLEncoder.encode(urlString, "utf-8");
+            } catch (UnsupportedEncodingException e) {
                 throw new SRUClientException(e);
             }
             logger.debug("SRU URL: " + urlString);
-            
             HttpClient client = new HttpClient();
             GetMethod method = new GetMethod(urlString);
             try {

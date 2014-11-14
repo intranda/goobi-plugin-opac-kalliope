@@ -23,8 +23,10 @@ package de.intranda.goobi.plugins;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -79,6 +81,8 @@ public class KalliopeOpacImport implements IOpacPlugin {
     private ConfigOpacCatalogue coc;
     private Prefs prefs;
 
+    private Map<String, String> searchFieldMap;
+
     public KalliopeOpacImport() throws ImportPluginException {
         this.config = ConfigPlugins.getPluginConfig(this);
         init();
@@ -101,11 +105,30 @@ public class KalliopeOpacImport implements IOpacPlugin {
             throw new ImportPluginException("Cannot locate mods mapping file " + mappingFile.getAbsolutePath());
         }
         defaultDocType = config.getString("defaultDocType", "ArchiveDocument");
+        initSearchFieldMap();
+    }
+
+    private void initSearchFieldMap() {
+        searchFieldMap = new HashMap<String, String>();
+        searchFieldMap.put("12", "ead.id");
+        searchFieldMap.put("4", "ead.title");
+        searchFieldMap.put("5024", "ead.unitid");
+        searchFieldMap.put("8218", "gi.index");
     }
 
     @Override
     public Fileformat search(String inSuchfeld, String inSuchbegriff, ConfigOpacCatalogue catalogue, Prefs inPrefs) throws ImportPluginException {
+        inSuchfeld = getMappedSearchField(inSuchfeld);
         return retrieveFileformat(inSuchfeld, inSuchbegriff, catalogue, inPrefs);
+    }
+
+    private String getMappedSearchField(String fieldCode) {
+        String fieldName = searchFieldMap.get(fieldCode);
+        if(fieldName != null) {
+            return fieldName;
+        } else {
+            return fieldCode;
+        }
     }
 
     protected Fileformat retrieveFileformat(String inSuchfeld, String inSuchbegriff, ConfigOpacCatalogue catalogue, Prefs inPrefs)
