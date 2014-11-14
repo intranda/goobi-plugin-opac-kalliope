@@ -75,7 +75,9 @@
         <name>DocLanguage</name>
         <xpath>/mods:mods/mods:language/mods:languageTerm[@type='code'][@authority='iso639-2b']
         </xpath>
-        <xpath>/mods:mods/mods:languageOfCataloging/mods:languageTerm[@authority='iso639-2b']
+        <xpath>/mods:mods/mods:originInfo/mods:languageOfCataloging/mods:languageTerm
+        </xpath>
+        <xpath>/mods:mods/mods:recordInfo/mods:languageOfCataloging/mods:languageTerm
         </xpath>
     </metadata>
     <metadata logical="true">
@@ -462,13 +464,6 @@
     <metadata logical="true">
         <name>recordContentSource</name>
         <xpath>/mods:mods/mods:recordInfo/mods:recordContentSource
-        </xpath>
-    </metadata>
-    <metadata logical="true">
-        <name>CatalogLanguage</name>
-        <xpath>/mods:mods/mods:originInfo/mods:languageOfCataloging/mods:languageTerm
-        </xpath>
-        <xpath>/mods:mods/mods:recordInfo/mods:languageOfCataloging/mods:languageTerm
         </xpath>
     </metadata>
     <metadata logical="true">

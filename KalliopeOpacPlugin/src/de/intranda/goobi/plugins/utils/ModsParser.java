@@ -20,6 +20,8 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 
+import de.intranda.utils.SimpleMatrix;
+import de.intranda.utils.SimpleMatrix.MatrixFiller;
 import ugh.dl.DocStruct;
 import ugh.dl.Metadata;
 import ugh.dl.MetadataType;
@@ -45,6 +47,7 @@ public class ModsParser {
     public static final Namespace NS_MODS = Namespace.getNamespace("mods", "http://www.loc.gov/mods/v3");
     private boolean mergeXPathInstances = false;
     private boolean mergeXPaths = true;
+    private String ignoreRegex = "";
     private static final String defaultPersonRole = "Author";
 
     /**
@@ -54,7 +57,7 @@ public class ModsParser {
      * @param modsMappingFile The file containing the rules for mapping mods to goobi
      * @param pluginConfig The config for this plugin
      * @param anchorMetadataList The list of metadata to write in the anchor DocStruct, or null if all Metadata should be written to anchor
-     * @throws ParserException 
+     * @throws ParserException
      * @throws IOException
      * @throws JDOMException
      */
@@ -65,7 +68,7 @@ public class ModsParser {
         try {
             mapDoc = new SAXBuilder().build(modsMappingFile);
         } catch (JDOMException | IOException e) {
-           throw new ParserException(e);
+            throw new ParserException(e);
         }
         fillPersonRoleMap();
     }
@@ -97,6 +100,7 @@ public class ModsParser {
                 setSeparator(eleMetadata);
                 setMergeXPaths(eleMetadata);
                 setMergeXPathInstances(eleMetadata);
+                setIgnoreRegex(eleMetadata);
 
                 String mdName = eleMetadata.getChildTextTrim("name", null);
                 MetadataType mdType = prefs.getMetadataTypeByName(mdName);
@@ -134,54 +138,90 @@ public class ModsParser {
 
     private void writeMetadataXPaths(List<Element> eleXpathList, MetadataType mdType, Document modsDoc) {
 
-        List<String> valueList = new ArrayList<String>();
+        List<Metadata> valueList = new ArrayList<Metadata>();
+        List<List<Object>> nodeList = new ArrayList<List<Object>>();
+
         for (Element eleXpath : eleXpathList) {
             String query = eleXpath.getTextTrim();
             XPathExpression<Object> xpath = XPathFactory.instance().compile(query, Filters.fpassthrough(), null, NS_MODS);
-            List<Object> nodeList = xpath.evaluate(modsDoc);
-            setMergeXPathInstances(eleXpath);
+            List<Object> xPathNodeList = new ArrayList<Object>(xpath.evaluate(modsDoc));
+            xPathNodeList.add(0, eleXpath);
+            nodeList.add(xPathNodeList);
+        }
 
-            //read values
-            if (nodeList != null) {
-                List<String> nodeValueList = getMetadataNodeValues(nodeList, mdType);
-                if (mergeXPathInstances) {
-                    StringBuilder sb = new StringBuilder();
-                    for (String string : nodeValueList) {
-                        sb.append(string);
-                        sb.append(separator);
-                    }
-                    valueList.add(sb.substring(0, sb.length() - separator.length()));
-                } else {
-                    if (mergeXPaths) {
-                        int count = 0;
-                        for (String value : nodeValueList) {
-                            if (value != null && valueList.size() <= count) {
-                                valueList.add(value);
-                            } else if (value != null) {
-                                value = valueList.get(count) + separator + value;
-                                valueList.set(count, value);
-                            }
-                            count++;
-                        }
-                    } else {
-                        valueList.addAll(nodeValueList);
-                    }
+        SimpleMatrix<Object> nodeMatrix = new SimpleMatrix<Object>(nodeList);
+//        logger.debug("Created xpath node matrix\n" + nodeMatrix);
+        SimpleMatrix<Metadata> mdMatrix = convertToMetadataMatrix(nodeMatrix, mdType);
+        List<Metadata> mdList = convertToMetadataList(mdMatrix);
+
+        for (Metadata metadata : mdList) {
+            if (metadata != null) {
+                writeMetadata(metadata);
+            }
+        }
+
+    }
+
+    /**
+     * Collapses the matrix into a list: One entry for each matrix-position if mergeXPaths=false; one for each column otherwise
+     * 
+     * @param mdMatrix
+     * @return
+     */
+    private List<Metadata> convertToMetadataList(SimpleMatrix<Metadata> mdMatrix) {
+        List<Metadata> mdList = new ArrayList<Metadata>();
+        if (mergeXPaths) {
+            for (int i = 0; i < mdMatrix.getColumns(); i++) {
+                Metadata columnMd = mergeMetadata(mdMatrix.getColumnAsList(i));
+                mdList.add(columnMd);
+            }
+        } else {
+            for (int i = 0; i < mdMatrix.getRows(); i++) {
+                for (int j = 0; j < mdMatrix.getColumns(); j++) {
+                    mdList.add(mdMatrix.get(i, j));
                 }
             }
         }
+        return mdList;
+    }
 
-        //create and write medadata
-        for (String value : valueList) {
-            try {
-                Metadata md = new Metadata(mdType);
-                md.setValue(value);
-                writeMetadata(md);
-            } catch (MetadataTypeNotAllowedException e) {
-                logger.error("Failed to create metadata " + mdType.getName());
+    /**
+     * Creates a matrix of metadata, one row for each xPath, each row containing the values of different hits with the same xPath. If the xPath calls
+     * to merge the hits into one, a single metadata is written into the first column
+     * 
+     * @param nodeMatrix
+     * @param mdType
+     * @return
+     */
+    private SimpleMatrix<Metadata> convertToMetadataMatrix(final SimpleMatrix<Object> nodeMatrix, final MetadataType mdType) {
+        SimpleMatrix<Metadata> mdMatrix = new SimpleMatrix<Metadata>(nodeMatrix.getRows(), nodeMatrix.getColumns() - 1);
+        MatrixFiller<Metadata> filler = new MatrixFiller<Metadata>() {
+
+            @Override
+            public Metadata calculateValue(int row, int column) {
+                Element eleXPath = (Element) nodeMatrix.get(row, 0);
+                boolean mergeRow = isMergeXPathInstances(eleXPath);
+                if (mergeRow && column > 0) {
+                    return null;
+                } else {
+                    List<Object> xPathNodeList = nodeMatrix.getRowAsList(row);
+                    if (xPathNodeList.size() < 2) {
+                        return null;
+                    } else {
+                        xPathNodeList = xPathNodeList.subList(1, xPathNodeList.size());
+                        if (!mergeRow) { //if we don't merge the whole row, we only want one single metadata node
+                            xPathNodeList = xPathNodeList.subList(column, column + 1);
+                        }
+                        List<Metadata> xPathMetadata = getMetadataNodeValues(xPathNodeList, mdType);
+                        Metadata metadata = mergeMetadata(xPathMetadata);
+                        return metadata;
+                    }
+                }
+
             }
-
-        }
-
+        };
+        mdMatrix.fill(filler);
+        return mdMatrix;
     }
 
     private void writePersonXPaths(List<Element> eleXpathList, MetadataType mdType, Document modsDoc) {
@@ -196,28 +236,80 @@ public class ModsParser {
         }
     }
 
-    private List<String> getMetadataNodeValues(List nodeList, MetadataType mdType) {
+    private List<Metadata> getMetadataNodeValues(List nodeList, MetadataType mdType) {
 
-        List<String> valueList = new ArrayList<String>();
+        List<Metadata> valueList = new ArrayList<Metadata>();
 
         for (Object objValue : nodeList) {
-            String value = null;
-            if (objValue instanceof Element) {
-                Element eleValue = (Element) objValue;
-                
-                logger.debug("mdType: " + mdType.getName() + "; Value: " + eleValue.getTextTrim());
-                value = getElementValue(eleValue, ", ");
-                //                                      value = eleValue.getTextTrim();
-            } else if (objValue instanceof Attribute) {
-                Attribute atrValue = (Attribute) objValue;
-                logger.debug("mdType: " + mdType.getName() + "; Value: " + atrValue.getValue());
-                value = atrValue.getValue();
+            try {
+                Metadata md = new Metadata(mdType);
+                String value = null;
+                if (objValue instanceof Element) {
+                    Element eleValue = (Element) objValue;
+                    createAuthorityFile(md, eleValue);
+                    logger.debug("mdType: " + mdType.getName() + "; Value: " + eleValue.getTextTrim());
+                    value = getElementValue(eleValue, ", ");
+                    //                                      value = eleValue.getTextTrim();
+                } else if (objValue instanceof Attribute) {
+                    Attribute atrValue = (Attribute) objValue;
+                    logger.debug("mdType: " + mdType.getName() + "; Value: " + atrValue.getValue());
+                    value = atrValue.getValue();
+                }
+                if (value != null && !value.trim().isEmpty()) {
+                    md.setValue(value);
+                    valueList.add(md);
+                }
+            } catch (MetadataTypeNotAllowedException e) {
+                logger.error("Failed to create metadata " + mdType.getName());
             }
-
-            valueList.add(value);
         }
 
         return valueList;
+    }
+
+    private Metadata mergeMetadata(List<Metadata> mdList) {
+        if (mdList == null || mdList.isEmpty() || mdList.get(0) == null) {
+            return null;
+        } else {
+            MetadataType type = mdList.get(0).getType();
+            StringBuilder valueBuilder = new StringBuilder();
+            Metadata newMetadata;
+            try {
+                newMetadata = new Metadata(type);
+            } catch (MetadataTypeNotAllowedException e) {
+                return null; //should never happen
+            }
+            for (Metadata metadata : mdList) {
+                valueBuilder.append(metadata.getValue());
+                valueBuilder.append(separator);
+                if (metadata.getAuthorityValue() != null) {
+                    newMetadata.setAuthorityValue(metadata.getAuthorityValue());
+                }
+                if (metadata.getAuthorityID() != null) {
+                    newMetadata.setAuthorityID(metadata.getAuthorityID());
+                }
+                if (metadata.getAuthorityURI() != null) {
+                    newMetadata.setAuthorityURI(metadata.getAuthorityURI());
+                }
+            }
+            String value = valueBuilder.toString();
+            value = value.substring(0, value.length() - separator.length());
+            newMetadata.setValue(value);
+            return newMetadata;
+        }
+    }
+
+    private void createAuthorityFile(Metadata md, Element eleValue) {
+        if (eleValue.getAttribute("valueURI") != null) {
+            String authorityURI = eleValue.getAttributeValue("valueURI");
+            String authorityValue = authorityURI.substring(authorityURI.lastIndexOf("/") + 1);
+            authorityURI = authorityURI.substring(0, authorityURI.lastIndexOf("/") + 1);
+            String authorityID = eleValue.getAttributeValue("authority");
+            if (authorityID == null) {
+                authorityID = authorityURI.substring(authorityURI.lastIndexOf("/") + 1).replace("/", "").toUpperCase();
+            }
+            md.setAutorityFile(authorityID, authorityURI, authorityValue);
+        }
     }
 
     private void writePersonNodeValues(List<Element> xPathNodeList, MetadataType mdType) {
@@ -225,8 +317,6 @@ public class ModsParser {
             String displayName = "";
             String firstName = "";
             String lastName = "";
-            String termsOfAddress = "";
-            String date = "";
             String roleTerm = "";
             String typeName = defaultPersonRole;
 
@@ -244,12 +334,6 @@ public class ModsParser {
                         if (type == null || type.isEmpty()) {
                             // no type
                             displayName = eleNamePart.getValue();
-                        } else if (type.contentEquals("date")) {
-                            // do nothing?
-                        } else if (type.contentEquals("termsOfAddress")) {
-                            termsOfAddress = eleNamePart.getValue();
-                        } else if (type.contentEquals("date")) {
-                            date = eleNamePart.getValue();
                         } else if (type.contentEquals("given")) {
                             firstName = eleNamePart.getValue();
                         } else if (type.contentEquals("family")) {
@@ -286,6 +370,7 @@ public class ModsParser {
                     person.setFirstname(firstName);
                     person.setLastname(lastName);
                     person.setRole(mdType.getName());
+                    createAuthorityFile(person, node);
                 } catch (MetadataTypeNotAllowedException e) {
                     logger.error("Failed to create person metadata " + mdType.getName());
                 }
@@ -319,6 +404,9 @@ public class ModsParser {
 
     private void writePerson(Person person) {
 
+        person.setLastname(person.getLastname().replaceAll(ignoreRegex, "").trim());
+        person.setFirstname(person.getFirstname().replaceAll(ignoreRegex, "").trim());
+        
         if (writeLogical) {
 
             try {
@@ -358,6 +446,8 @@ public class ModsParser {
     }
 
     private void writeMetadata(Metadata metadata) {
+        
+        metadata.setValue(metadata.getValue().replaceAll(ignoreRegex, "").trim());
 
         if (writeLogical) {
 
@@ -465,6 +555,27 @@ public class ModsParser {
             mergeXPathInstances = false;
         }
     }
+    
+    public void setIgnoreRegex(Element ele) {
+        String value = ele.getAttributeValue("ignoreRegex");
+        if(value != null) {
+            ignoreRegex = value;
+        } else {
+            ignoreRegex = "";
+        }
+    }
+    
+
+    public boolean isMergeXPathInstances(Element ele) {
+        String value = ele.getAttributeValue("mergeXPathInstances");
+        if ("true".equals(value)) {
+            return true;
+        } else if ("false".equals(value)) {
+            return false;
+        } else {
+            return isMergeXPathInstances();
+        }
+    }
 
     public boolean isMergeXPaths() {
         return mergeXPaths;
@@ -493,19 +604,19 @@ public class ModsParser {
         return null;
         //        throw new ParserException("No element \"typeOfResource\" found in mods section.");
     }
-    
+
     public static List<Object> find(String xPathQuery, Object source) {
         XPathExpression<Object> xpath = XPathFactory.instance().compile(xPathQuery);
         List<Object> nodeList = xpath.evaluate(source);
         return nodeList;
     }
-    
+
     public static List<Element> findElement(String xPathQuery, Object source) {
         XPathExpression<Element> xpath = XPathFactory.instance().compile(xPathQuery, Filters.element());
         List<Element> nodeList = xpath.evaluate(source);
         return nodeList;
     }
-    
+
     public static List<Attribute> findAttribute(String xPathQuery, Object source) {
         XPathExpression<Attribute> xpath = XPathFactory.instance().compile(xPathQuery, Filters.attribute());
         List<Attribute> nodeList = xpath.evaluate(source);
@@ -515,17 +626,17 @@ public class ModsParser {
     public String getAchorID(Object modsSource) {
         String query = "relatedItem[@type='host']/identifier";
         List<Element> list = findElement(query, modsSource);
-        if(list.size() > 0) {
-            if(list.size() > 1) {
+        if (list.size() > 0) {
+            if (list.size() > 1) {
                 logger.warn("Found more than one instance of anchor identifier");
             }
             return list.get(0).getValue();
         } else {
             return null;
         }
-        
+
     }
-    
+
     public static class ParserException extends Exception {
 
         public ParserException() {

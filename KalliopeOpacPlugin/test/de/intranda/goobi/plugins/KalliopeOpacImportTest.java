@@ -1,6 +1,8 @@
 package de.intranda.goobi.plugins;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
+
+import java.io.File;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -10,6 +12,7 @@ import org.junit.Test;
 
 import ugh.dl.Fileformat;
 import ugh.dl.Prefs;
+import de.intranda.utils.DocumentUtils;
 import de.sub.goobi.helper.exceptions.ImportPluginException;
 import de.unigoettingen.sub.search.opac.ConfigOpacCatalogue;
 
@@ -48,6 +51,8 @@ public class KalliopeOpacImportTest {
         try {
             Fileformat ff = importer.retrieveFileformat(inSuchfeld, inSuchbegriff, catalogue, prefs);
             System.out.println(ff.getDigitalDocument());
+            File outputFile = new File("output", "meta.xml");
+            ff.write(outputFile.getAbsolutePath());
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
