@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import de.intranda.goobi.plugins.KalliopeOpacImport;
+
 public class PluginInfo {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {

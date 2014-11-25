@@ -146,7 +146,7 @@
         </xpath>
     </metadata>
     <metadata logical="true" ignoreRegex="[\[\(](.+?)[\]\)]">
-        <name>Author</name>
+        <name>Person</name>
         <xpath>/mods:mods/mods:name[@type='personal']
         </xpath>
         <roleMapping>

@@ -509,7 +509,7 @@ public class ModsParser {
 
     private void fillPersonRoleMap() {
         if (mapDoc != null) {
-            Element elePerson = getElementBySubElement("name", "Author", mapDoc.getRootElement());
+            Element elePerson = getElementBySubElement("name", "Person", mapDoc.getRootElement());
             if (elePerson != null) {
                 Element eleMapping = elePerson.getChild("roleMapping");
                 if (eleMapping != null && !eleMapping.getChildren().isEmpty()) {

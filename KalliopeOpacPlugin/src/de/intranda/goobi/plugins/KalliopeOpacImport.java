@@ -69,7 +69,8 @@ public class KalliopeOpacImport implements IOpacPlugin {
     private static final Logger logger = Logger.getLogger(KalliopeOpacImport.class);
 
     private static final String PLUGIN_NAME = "Kalliope-SRU";
-    private static final String PLUGIN_VERSION = "v0.1";
+    private static final String PLUGIN_VERSION = "v1.0";
+    private static final String PLUGIN_BUILDDATE = "20141125";
 
     private Configuration config;
     private String inputEncoding;
@@ -449,6 +450,10 @@ public class KalliopeOpacImport implements IOpacPlugin {
 
     public String getGattung() {
         return gattung;
+    }
+    
+    public static String getFullPluginName() {
+        return PLUGIN_NAME + " " + PLUGIN_VERSION + " " + PLUGIN_BUILDDATE;
     }
 
 }
