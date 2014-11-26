@@ -19,6 +19,12 @@ import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
+import org.joda.time.format.ISODateTimeFormat;
 
 import de.intranda.utils.SimpleMatrix;
 import de.intranda.utils.SimpleMatrix.MatrixFiller;
@@ -48,6 +54,7 @@ public class ModsParser {
     private boolean mergeXPathInstances = false;
     private boolean mergeXPaths = true;
     private String ignoreRegex = "";
+    private boolean date;
     private static final String defaultPersonRole = "Author";
 
     /**
@@ -101,12 +108,13 @@ public class ModsParser {
                 setMergeXPaths(eleMetadata);
                 setMergeXPathInstances(eleMetadata);
                 setIgnoreRegex(eleMetadata);
+                setDate(eleMetadata);
 
                 String mdName = eleMetadata.getChildTextTrim("name", null);
                 MetadataType mdType = prefs.getMetadataTypeByName(mdName);
                 if (mdType != null) {
                     List<Element> eleXpathList = eleMetadata.getChildren("xpath", null);
-                    if (mdType.getIsPerson()) {
+                    if (mdType.getIsPerson() || "Person".equals(mdName)) {
                         writePersonXPaths(eleXpathList, mdType, modsDoc);
                     } else {
                         writeMetadataXPaths(eleXpathList, mdType, modsDoc);
@@ -116,6 +124,7 @@ public class ModsParser {
         }
 
     }
+
 
     private void setSeparator(Element eleMetadata) {
         if (eleMetadata.getAttribute("separator") != null) {
@@ -448,7 +457,10 @@ public class ModsParser {
     private void writeMetadata(Metadata metadata) {
         
         metadata.setValue(metadata.getValue().replaceAll(ignoreRegex, "").trim());
-
+        if(isDate()) {
+            metadata.setValue(getFormattedDate(metadata.getValue()));
+        }
+        
         if (writeLogical) {
 
             try {
@@ -485,6 +497,26 @@ public class ModsParser {
             }
         }
 
+    }
+
+    protected static String getFormattedDate(String value) {
+        String [] valueParts = value.split("[/\\-_]");
+        if(valueParts.length > 1) {
+            StringBuilder partsBuilder = new StringBuilder();
+            for (String part : valueParts) {
+                partsBuilder.append(getFormattedDate(part));
+                partsBuilder.append("-");
+            }
+            return partsBuilder.substring(0, partsBuilder.length()-1);
+        } else if(value.matches("\\d+") && value.length() == 8){
+            
+            DateTimeFormatter inputFormat = DateTimeFormat.forPattern("yyyyMMdd");
+            DateTimeFormatter outputFormat = DateTimeFormat.forPattern("dd.MM.yyyy");
+            DateTime date = inputFormat.parseDateTime(value);
+            return date.toString(outputFormat);
+        } else {
+            return value;
+        }
     }
 
     private static String getElementValue(Element eleValue, String separator) {
@@ -634,7 +666,19 @@ public class ModsParser {
         } else {
             return null;
         }
+    }
+    
 
+    private void setDate(Element eleMetadata) {
+        if("true".equals(eleMetadata.getAttributeValue("isDate"))) {
+            date = true;
+        } else {
+            date = false;
+        }
+    }
+
+    public boolean isDate() {
+        return date;
     }
 
     public static class ParserException extends Exception {

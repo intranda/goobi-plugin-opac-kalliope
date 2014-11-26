@@ -69,15 +69,15 @@ public class KalliopeOpacImport implements IOpacPlugin {
     private static final Logger logger = Logger.getLogger(KalliopeOpacImport.class);
 
     private static final String PLUGIN_NAME = "Kalliope-SRU";
-    private static final String PLUGIN_VERSION = "v1.0";
-    private static final String PLUGIN_BUILDDATE = "20141125";
+    private static final String PLUGIN_VERSION = "v1.1";
+    private static final String PLUGIN_BUILDDATE = "20141126";
 
     private Configuration config;
     private String inputEncoding;
     private File mappingFile;
     private String defaultDocType;
     private int hitcount;
-    private String gattung = "Aa";
+    private String gattung = "Ag";
     private String atstsl;
     private ConfigOpacCatalogue coc;
     private Prefs prefs;
@@ -97,6 +97,7 @@ public class KalliopeOpacImport implements IOpacPlugin {
     private void init() throws ImportPluginException {
         this.inputEncoding = config.getString("charset", "utf-8");
         String mappingPath = config.getString("mapping", "mods_map_kalliope.xml");
+        this.gattung = config.getString("defaultPicaType", "Ag");
         if (mappingPath.startsWith("/")) {
             mappingFile = new File(mappingPath);
         } else {

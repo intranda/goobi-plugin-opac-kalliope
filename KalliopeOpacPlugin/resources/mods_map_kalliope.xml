@@ -231,6 +231,7 @@
                 <roleTerm>aut</roleTerm>
                 <roleTerm>autor</roleTerm>
                 <roleTerm>author</roleTerm>
+                <roleTerm>creator</roleTerm>
             </person>
             <person>
                 <name>Composer</name>

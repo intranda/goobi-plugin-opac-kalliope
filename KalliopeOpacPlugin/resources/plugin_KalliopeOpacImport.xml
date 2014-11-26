@@ -3,4 +3,5 @@
     <charset>utf-8</charset>
     <mapping>mods_map_kalliope.xml</mapping>
     <defaultDocType>ArchiveDocument</defaultDocType>
+    <defaultPicaType>Ag</defaultPicaType>
 </config_plugin>
