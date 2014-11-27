@@ -24,6 +24,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
+import org.joda.time.format.DateTimeParser;
 import org.joda.time.format.ISODateTimeFormat;
 
 import de.intranda.utils.SimpleMatrix;
@@ -54,7 +55,8 @@ public class ModsParser {
     private boolean mergeXPathInstances = false;
     private boolean mergeXPaths = true;
     private String ignoreRegex = "";
-    private boolean date;
+    private String datePattern;
+    private String dateInputPattern;
     private static final String defaultPersonRole = "Author";
 
     /**
@@ -108,7 +110,7 @@ public class ModsParser {
                 setMergeXPaths(eleMetadata);
                 setMergeXPathInstances(eleMetadata);
                 setIgnoreRegex(eleMetadata);
-                setDate(eleMetadata);
+                setDatePatterns(eleMetadata);
 
                 String mdName = eleMetadata.getChildTextTrim("name", null);
                 MetadataType mdType = prefs.getMetadataTypeByName(mdName);
@@ -456,9 +458,13 @@ public class ModsParser {
 
     private void writeMetadata(Metadata metadata) {
         
+        if(getDateInputPattern() != null) {
+            metadata.setValue("12.03.1887 - 14.07.1888 [letzter Eintrag]");
+        }
+        
         metadata.setValue(metadata.getValue().replaceAll(ignoreRegex, "").trim());
-        if(isDate()) {
-            metadata.setValue(getFormattedDate(metadata.getValue()));
+        if(getDatePattern() != null) {
+            metadata.setValue(getFormattedDate(metadata.getValue(), getDateInputPattern(), getDatePattern()));
         }
         
         if (writeLogical) {
@@ -499,25 +505,56 @@ public class ModsParser {
 
     }
 
-    protected static String getFormattedDate(String value) {
-        String [] valueParts = value.split("[/\\-_]");
+    public static String getFormattedDate(String value, String inputPattern, String outputPattern) {
+        String inputSeparatorPattern = "[\\-_/]";
+        String outputSeparator = "-";
+        String [] valueParts = value.split(inputSeparatorPattern);
         if(valueParts.length > 1) {
             StringBuilder partsBuilder = new StringBuilder();
             for (String part : valueParts) {
-                partsBuilder.append(getFormattedDate(part));
-                partsBuilder.append("-");
+                partsBuilder.append(getFormattedDate(part, inputPattern, outputPattern));
+                partsBuilder.append(outputSeparator);
             }
-            return partsBuilder.substring(0, partsBuilder.length()-1);
-        } else if(value.matches("\\d+") && value.length() == 8){
-            
-            DateTimeFormatter inputFormat = DateTimeFormat.forPattern("yyyyMMdd");
-            DateTimeFormatter outputFormat = DateTimeFormat.forPattern("dd.MM.yyyy");
-            DateTime date = inputFormat.parseDateTime(value);
-            return date.toString(outputFormat);
+            return partsBuilder.substring(0, partsBuilder.length()-outputSeparator.length());
         } else {
-            return value;
+            try {                
+                List<DateTimeParser> inputParsers = new ArrayList<DateTimeParser>();
+                String[] inputPatterns = inputPattern.split("\\|\\|");
+                for (String pattern : inputPatterns) {
+                    if(!pattern.trim().isEmpty()) {
+                        inputParsers.add(DateTimeFormat.forPattern(pattern.trim()).getParser());
+                    }
+                }
+                DateTimeFormatter inputFormat = new DateTimeFormatterBuilder().append(null, inputParsers.toArray(new DateTimeParser[inputParsers.size()])).toFormatter();
+                DateTimeFormatter outputFormat = DateTimeFormat.forPattern(outputPattern);
+                DateTime date = inputFormat.parseDateTime(value.trim());
+                return date.toString(outputFormat);
+            } catch(UnsupportedOperationException | IllegalArgumentException e) {
+                System.out.println(value + " cannot be parsed as date: " + e.getMessage());
+                return value;
+            }
         }
     }
+    
+//    protected static String getFormattedDate(String value) {
+//        String [] valueParts = value.split("[/\\-_]");
+//        if(valueParts.length > 1) {
+//            StringBuilder partsBuilder = new StringBuilder();
+//            for (String part : valueParts) {
+//                partsBuilder.append(getFormattedDate(part));
+//                partsBuilder.append("-");
+//            }
+//            return partsBuilder.substring(0, partsBuilder.length()-1);
+//        } else if(value.matches("\\d+") && value.length() == 8){
+//            
+//            DateTimeFormatter inputFormat = DateTimeFormat.forPattern("yyyyMMdd");
+//            DateTimeFormatter outputFormat = DateTimeFormat.forPattern("dd.MM.yyyy");
+//            DateTime date = inputFormat.parseDateTime(value);
+//            return date.toString(outputFormat);
+//        } else {
+//            return value;
+//        }
+//    }
 
     private static String getElementValue(Element eleValue, String separator) {
         if (separator == null) {
@@ -669,16 +706,22 @@ public class ModsParser {
     }
     
 
-    private void setDate(Element eleMetadata) {
-        if("true".equals(eleMetadata.getAttributeValue("isDate"))) {
-            date = true;
-        } else {
-            date = false;
+    private void setDatePatterns(Element eleMetadata) {
+        datePattern = eleMetadata.getAttributeValue("datePattern");
+        dateInputPattern = eleMetadata.getAttributeValue("dateInputPattern");
+        
+        if(datePattern != null && dateInputPattern == null) {
+            dateInputPattern = "yyyyMMdd||dd.MM.yyyy||yyyy-MM-dd||dd-MM-yyyy||MM/dd/yyyy||yyyy/MM/dd";
         }
+        
     }
 
-    public boolean isDate() {
-        return date;
+    public String getDatePattern() {
+        return datePattern;
+    }
+    
+    public String getDateInputPattern() {
+        return dateInputPattern;
     }
 
     public static class ParserException extends Exception {

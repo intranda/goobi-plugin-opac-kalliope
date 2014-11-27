@@ -80,14 +80,16 @@
         <xpath>/mods:mods/mods:recordInfo/mods:languageOfCataloging/mods:languageTerm
         </xpath>
     </metadata>
-    <metadata logical="true">
+    <metadata logical="true" datePattern="yyyy" mergeXPaths="false" ignoreRegex="(\[.+?\])|([-/].*)">
         <name>PublicationYear</name>
         <xpath>/mods:mods/mods:originInfo/mods:dateCreated
         </xpath>
+        <xpath>/mods:mods/mods:originInfo/mods:dateIssued</xpath>
     </metadata>
-    <metadata logical="true">
-        <name>PublicationYear</name>
-        <!-- <xpath>/mods:mods/mods:originInfo/mods:dateIssued[@encoding='marc']</xpath> -->
+    <metadata logical="true" datePattern="dd.MM.yyyy" mergeXPaths="false">
+        <name>Date</name>
+        <xpath>/mods:mods/mods:originInfo/mods:dateCreated
+        </xpath>
         <xpath>/mods:mods/mods:originInfo/mods:dateIssued</xpath>
     </metadata>
     <metadata logical="true">
@@ -353,35 +355,35 @@
             </person>
         </roleMapping>
     </metadata>
-    <metadata logical="true" separateOccurances="true" separateXPaths="true" ignoreRegex="[\[](.+?)[\]]">
+    <metadata logical="true" mergeXPathInstances="false" margeXPaths="false" ignoreRegex="[\[](.+?)[\]]">
         <name>Author_corporate</name>
         <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='creator']</xpath>
         <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='author']</xpath>
     </metadata>
-        <metadata logical="true" separateOccurances="true" separateXPaths="true" ignoreRegex="[\[](.+?)[\]]">
+        <metadata logical="true" mergeXPathInstances="false" mergeXPaths="false" ignoreRegex="[\[](.+?)[\]]">
         <name>Addressee_corporate</name>
         <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='addressee']</xpath>
     </metadata>
-        <metadata logical="true" separateOccurances="true" separateXPaths="true">
+        <metadata logical="true" mergeXPathInstances="false" mergeXPaths="false">
         <name>Correspondent_corporate</name>
         <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='correspondent']</xpath>
     </metadata>
-    <metadata logical="true" separateOccurances="true" separateXPaths="true">
+    <metadata logical="true" mergeXPathInstances="false" mergeXPaths="false">
         <name>OtherCorporate</name>
         <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='other']</xpath>
         <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='otherroles']</xpath>
     </metadata>
-   <metadata logical="true" separateOccurances="false" separateXPaths="false" separator="; ">
+   <metadata logical="true" mergeXPathInstances="true" mergeXPaths="true" separator="; ">
         <name>CreatorsAllOrigin</name>
         <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='author']</xpath>
         <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='creator']</xpath>
         <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='correspondent']</xpath>
     </metadata>
-        <metadata logical="true" separateOccurances="true" separateXPaths="true">
+        <metadata logical="true" mergeXPathInstances="false" mergeXPaths="false">
         <name>SubjectCorporate</name>
         <xpath>/mods:mods/mods:subject/mods:name[@type='corporate']</xpath>
     </metadata>
-    <metadata logical="true" separateOccurances="true" separateXPaths="true">
+    <metadata logical="true" mergeXPathInstances="false" mergeXPaths="false">
         <name>SubjectPerson</name>
         <xpath>/mods:mods/mods:subject/mods:name[@type='personal']</xpath>
     </metadata>

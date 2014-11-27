@@ -2667,16 +2667,17 @@
     <metadata num="*">TitleDocParallel</metadata>
     <metadata num="*">TitleDocSub1</metadata>
     <metadata num="1o">CreatorsAllOrigin</metadata>
+    <metadata num="*" DefaultDisplay="true">Date</metadata>
     <metadata num="*">PublicationYear</metadata>
     <metadata num="*">PlaceOfPublication</metadata>
     <metadata num="*">TitleRelatedWork</metadata>
     <metadata num="1o">IdentifierRelatedWork</metadata>
-    <metadata num="*">ContentDescription</metadata>
-    <metadata num="*">NoteGeneral</metadata>
+    <metadata num="*" DefaultDisplay="true">ContentDescription</metadata>
+    <metadata num="*" DefaultDisplay="true">NoteGeneral</metadata>
     <metadata num="*">PhsicalDescription</metadata>
     <metadata num="*">DocLanguage</metadata>
     <metadata num="*">datedigit</metadata>
-    <metadata num="*">SizeSourcePrint</metadata>
+    <metadata num="*" DefaultDisplay="true">SizeSourcePrint</metadata>
     <metadata num="*">PhysicalLocation</metadata>
     <metadata num="*">Keyword</metadata>
     <metadata num="*">Copyright</metadata>
@@ -2925,8 +2926,8 @@
   <DocStrctType>
     <Name>Notes</Name>
     <language name="de">Notizen</language>
-    <language name="es">Notas</language>
     <language name="en">Notes</language>
+    <language name="es">Notas</language>
     <metadata num="*">singleDigCollection</metadata>
     <metadata num="*">_urn</metadata>
     <metadata num="*" DefaultDisplay="true">AccessLicense</metadata>
@@ -3046,8 +3047,8 @@
   </DocStrctType>
   <DocStrctType>
     <Name>Report</Name>
-    <language name="de">Bericht</language>
     <language name="en">report</language>
+    <language name="de">Bericht</language>
     <allowedchildtype>Acknowledgment</allowedchildtype>
     <allowedchildtype>Addendum</allowedchildtype>
     <allowedchildtype>Advertising</allowedchildtype>
@@ -3128,8 +3129,8 @@
   </DocStrctType>
   <DocStrctType>
     <Name>Book</Name>
-    <language name="de">Buch</language>
     <language name="en">Book</language>
+    <language name="de">Buch</language>
     <allowedchildtype>Acknowledgment</allowedchildtype>
     <allowedchildtype>Addendum</allowedchildtype>
     <allowedchildtype>Advertising</allowedchildtype>
@@ -3210,8 +3211,8 @@
   </DocStrctType>
   <DocStrctType>
     <Name>Document</Name>
-    <language name="de">Dokument</language>
     <language name="en">document</language>
+    <language name="de">Dokument</language>
     <allowedchildtype>Acknowledgment</allowedchildtype>
     <allowedchildtype>Addendum</allowedchildtype>
     <allowedchildtype>Advertising</allowedchildtype>
@@ -3292,8 +3293,8 @@
   </DocStrctType>
   <DocStrctType>
     <Name>Fragment</Name>
-    <language name="de">Fragment</language>
     <language name="en">fragment</language>
+    <language name="de">Fragment</language>
     <allowedchildtype>Acknowledgment</allowedchildtype>
     <allowedchildtype>Addendum</allowedchildtype>
     <allowedchildtype>Advertising</allowedchildtype>
@@ -3402,8 +3403,8 @@
   </DocStrctType>
   <DocStrctType>
     <Name>Text</Name>
-    <language name="de">Text</language>
     <language name="en">text</language>
+    <language name="de">Text</language>
     <allowedchildtype>Acknowledgment</allowedchildtype>
     <allowedchildtype>Addendum</allowedchildtype>
     <allowedchildtype>Advertising</allowedchildtype>
@@ -3543,8 +3544,8 @@
   </DocStrctType>
   <DocStrctType>
     <Name>PeriodicalInWork</Name>
-    <language name="de">Periodica</language>
     <language name="en">periodical</language>
+    <language name="de">Periodica</language>
     <allowedchildtype>PeriodicalVolume</allowedchildtype>
     <metadata num="1m" DefaultDisplay="true">CatalogIDDigital</metadata>
     <metadata num="+" DefaultDisplay="true">CatalogIDSource</metadata>
@@ -3568,6 +3569,76 @@
     <metadata num="*">DOI</metadata>
     <metadata num="*">RezenssionsZssDBID</metadata>
     <metadata num="1o">_purl</metadata>
+    <metadata num="1o">_digitalOrigin</metadata>
+  </DocStrctType>
+  <DocStrctType topStruct="true">
+    <Name>Foto</Name>
+    <language name="de">Foto</language>
+    <language name="en">Photograph</language>
+    <allowedchildtype>OtherDocStrct</allowedchildtype>
+    <metadata num="*" DefaultDisplay="true">OtherPerson</metadata>
+    <metadata num="*" DefaultDisplay="true">OtherCorporate</metadata>
+    <metadata num="1m" DefaultDisplay="true">CatalogIDDigital</metadata>
+    <metadata num="*" DefaultDisplay="true">CatalogIDSource</metadata>
+    <metadata num="*" DefaultDisplay="true">DocLanguage</metadata>
+    <metadata num="*" DefaultDisplay="true">Keyword</metadata>
+    <metadata num="*" DefaultDisplay="true">Date</metadata>
+    <metadata num="1o" DefaultDisplay="true">PlaceOfPublication</metadata>
+    <metadata num="1o" DefaultDisplay="true">PublicationYear</metadata>
+    <metadata num="1o" DefaultDisplay="true">TitleDocMain</metadata>
+    <metadata num="1o" DefaultDisplay="true">TSL_ATS</metadata>
+    <metadata num="1o">BibliographicCitation</metadata>
+    <metadata num="*">Creator</metadata>
+    <metadata num="1o">CreatorsAllOrigin</metadata>
+    <metadata num="*">FormatSourcePrint</metadata>
+    <metadata num="*">Photographer</metadata>
+    <metadata num="*">PublisherName</metadata>
+    <metadata num="1o">SizeSourcePrint</metadata>
+    <metadata num="*">TitleDocMainShort</metadata>
+    <metadata num="*">TitleDocSub1</metadata>
+    <metadata num="*">singleDigCollection</metadata>
+    <metadata num="*">Event</metadata>
+    <metadata num="*">_imageName</metadata>
+    <metadata num="1o">_purl</metadata>
+    <metadata num="1o">_dateDigitization</metadata>
+    <metadata num="1o">_placeOfElectronicOrigin</metadata>
+    <metadata num="1o">_electronicEdition</metadata>
+    <metadata num="1o">_electronicPublisher</metadata>
+    <metadata num="1o">_digitalOrigin</metadata>
+  </DocStrctType>
+  <DocStrctType topStruct="true">
+    <Name>Bild</Name>
+    <language name="de">Bild</language>
+    <language name="en">Painting</language>
+    <allowedchildtype>OtherDocStrct</allowedchildtype>
+    <metadata num="*" DefaultDisplay="true">OtherPerson</metadata>
+    <metadata num="*" DefaultDisplay="true">OtherCorporate</metadata>
+    <metadata num="1m" DefaultDisplay="true">CatalogIDDigital</metadata>
+    <metadata num="*" DefaultDisplay="true">CatalogIDSource</metadata>
+    <metadata num="*" DefaultDisplay="true">DocLanguage</metadata>
+    <metadata num="*" DefaultDisplay="true">Keyword</metadata>
+    <metadata num="*" DefaultDisplay="true">Date</metadata>
+    <metadata num="1o" DefaultDisplay="true">PlaceOfPublication</metadata>
+    <metadata num="1o" DefaultDisplay="true">PublicationYear</metadata>
+    <metadata num="1o" DefaultDisplay="true">TitleDocMain</metadata>
+    <metadata num="1o" DefaultDisplay="true">TSL_ATS</metadata>
+    <metadata num="1o">BibliographicCitation</metadata>
+    <metadata num="*">Creator</metadata>
+    <metadata num="1o">CreatorsAllOrigin</metadata>
+    <metadata num="*">FormatSourcePrint</metadata>
+    <metadata num="*">IllustratorArtist</metadata>
+    <metadata num="*">PublisherName</metadata>
+    <metadata num="1o">SizeSourcePrint</metadata>
+    <metadata num="*">TitleDocMainShort</metadata>
+    <metadata num="*">TitleDocSub1</metadata>
+    <metadata num="*">singleDigCollection</metadata>
+    <metadata num="*">Event</metadata>
+    <metadata num="*">_imageName</metadata>
+    <metadata num="1o">_purl</metadata>
+    <metadata num="1o">_dateDigitization</metadata>
+    <metadata num="1o">_placeOfElectronicOrigin</metadata>
+    <metadata num="1o">_electronicEdition</metadata>
+    <metadata num="1o">_electronicPublisher</metadata>
     <metadata num="1o">_digitalOrigin</metadata>
   </DocStrctType>
   <!-- DO NOT CHANGE!! -->
@@ -4339,73 +4410,49 @@
         <Name>Report</Name>
         <picaMainTag>002@</picaMainTag>
         <picaSubTag>0</picaSubTag>
-        <picaContent>Oa</picaContent>
-      </DocStruct>
-      <DocStruct>
-        <Name>Report</Name>
-        <picaMainTag>002@</picaMainTag>
-        <picaSubTag>0</picaSubTag>
-        <picaContent>Aa</picaContent>
+        <picaContent>RE</picaContent>
       </DocStruct>
       <DocStruct>
         <Name>Book</Name>
         <picaMainTag>002@</picaMainTag>
         <picaSubTag>0</picaSubTag>
-        <picaContent>Oa</picaContent>
-      </DocStruct>
-      <DocStruct>
-        <Name>Book</Name>
-        <picaMainTag>002@</picaMainTag>
-        <picaSubTag>0</picaSubTag>
-        <picaContent>Aa</picaContent>
+        <picaContent>BO</picaContent>
       </DocStruct>
       <DocStruct>
         <Name>Document</Name>
         <picaMainTag>002@</picaMainTag>
         <picaSubTag>0</picaSubTag>
-        <picaContent>Oa</picaContent>
-      </DocStruct>
-      <DocStruct>
-        <Name>Document</Name>
-        <picaMainTag>002@</picaMainTag>
-        <picaSubTag>0</picaSubTag>
-        <picaContent>Aa</picaContent>
+        <picaContent>DO</picaContent>
       </DocStruct>
       <DocStruct>
         <Name>Fragment</Name>
         <picaMainTag>002@</picaMainTag>
         <picaSubTag>0</picaSubTag>
-        <picaContent>Oa</picaContent>
-      </DocStruct>
-      <DocStruct>
-        <Name>Fragment</Name>
-        <picaMainTag>002@</picaMainTag>
-        <picaSubTag>0</picaSubTag>
-        <picaContent>Aa</picaContent>
+        <picaContent>FR</picaContent>
       </DocStruct>
       <DocStruct>
         <Name>Text</Name>
         <picaMainTag>002@</picaMainTag>
         <picaSubTag>0</picaSubTag>
-        <picaContent>Oa</picaContent>
-      </DocStruct>
-      <DocStruct>
-        <Name>Text</Name>
-        <picaMainTag>002@</picaMainTag>
-        <picaSubTag>0</picaSubTag>
-        <picaContent>Aa</picaContent>
+        <picaContent>TE</picaContent>
       </DocStruct>
       <DocStruct>
         <Name>PeriodicalInWork</Name>
         <picaMainTag>002@</picaMainTag>
         <picaSubTag>0</picaSubTag>
-        <picaContent>Ob</picaContent>
+        <picaContent>PW</picaContent>
       </DocStruct>
       <DocStruct>
-        <Name>PeriodicalInWork</Name>
+        <Name>Foto</Name>
         <picaMainTag>002@</picaMainTag>
         <picaSubTag>0</picaSubTag>
-        <picaContent>Ab</picaContent>
+        <picaContent>Fo</picaContent>
+      </DocStruct>
+      <DocStruct>
+        <Name>Bild</Name>
+        <picaMainTag>002@</picaMainTag>
+        <picaSubTag>0</picaSubTag>
+        <picaContent>Bi</picaContent>
       </DocStruct>
     </PicaPlus>
     <!-- ##########################################################################
@@ -5215,6 +5262,14 @@
       <DocStruct>
         <InternalName>PeriodicalInWork</InternalName>
         <MetsType>PeriodicalInWork</MetsType>
+      </DocStruct>
+      <DocStruct>
+        <InternalName>Foto</InternalName>
+        <MetsType>Foto</MetsType>
+      </DocStruct>
+      <DocStruct>
+        <InternalName>Bild</InternalName>
+        <MetsType>Bild</MetsType>
       </DocStruct>
     </METS>
   </Formats>

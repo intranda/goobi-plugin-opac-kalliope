@@ -4,6 +4,8 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.XMLConfiguration;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -20,9 +22,12 @@ import de.unigoettingen.sub.search.opac.ConfigOpacCatalogue;
 public class KalliopeOpacImportTest {
 
     private static final String prefsPath = "resources/ruleset_gbv_sim.xml";
+    private static final String configPath = "resources/plugin_KalliopeOpacImport.xml";
     
     private ConfigOpacCatalogue catalogue;
     private Prefs prefs;
+    private Configuration config;
+    
     
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -37,6 +42,7 @@ public class KalliopeOpacImportTest {
         catalogue = new ConfigOpacCatalogue("Kalliope (SRU)", "SRU-Schnittstelle des Kalliope-Verbunds", "kalliope-verbund.info", "sru", null, 80, "utf-8", null, null, "Kalliope");
         prefs = new Prefs();
         prefs.loadPrefs(prefsPath);
+        config = new XMLConfiguration(new File(configPath));
     
     }
     @After
@@ -45,10 +51,13 @@ public class KalliopeOpacImportTest {
 
     @Test
     public void testRetrieveFileformat() throws ImportPluginException {
-        KalliopeOpacImport importer = new KalliopeOpacImport();
+        KalliopeOpacImport importer = new KalliopeOpacImport(config);
         
         String inSuchfeld = "ead.title";
-        String inSuchbegriff = "Auflistung über Neuernannte ausserordentliche Mitglieder von 1919";
+        String inSuchbegriff = "Verzeichnis alterthümlicher Musikinstrumente Paul de Wit Leipzig";
+        
+//        String inSuchfeld = "ead.title";
+//        String inSuchbegriff = "Auflistung über Neuernannte ausserordentliche Mitglieder von 1919";
 //        String inSuchbegriff = "Katalog des Musikhistorischen Museums";
         try {
             Fileformat ff = importer.search(inSuchfeld, inSuchbegriff, catalogue, prefs);
