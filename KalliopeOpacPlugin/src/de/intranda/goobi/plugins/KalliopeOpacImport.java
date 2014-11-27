@@ -70,7 +70,7 @@ public class KalliopeOpacImport implements IOpacPlugin {
 
     private static final String PLUGIN_NAME = "Kalliope-SRU";
     private static final String PLUGIN_VERSION = "v1.1";
-    private static final String PLUGIN_BUILDDATE = "20141126";
+    private static final String PLUGIN_BUILDDATE = "20141127";
 
     private Configuration config;
     private String inputEncoding;
