@@ -458,10 +458,6 @@ public class ModsParser {
 
     private void writeMetadata(Metadata metadata) {
         
-        if(getDateInputPattern() != null) {
-            metadata.setValue("12.03.1887 - 14.07.1888 [letzter Eintrag]");
-        }
-        
         metadata.setValue(metadata.getValue().replaceAll(ignoreRegex, "").trim());
         if(getDatePattern() != null) {
             metadata.setValue(getFormattedDate(metadata.getValue(), getDateInputPattern(), getDatePattern()));

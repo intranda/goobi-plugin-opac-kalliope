@@ -80,13 +80,13 @@
         <xpath>/mods:mods/mods:recordInfo/mods:languageOfCataloging/mods:languageTerm
         </xpath>
     </metadata>
-    <metadata logical="true" datePattern="yyyy" mergeXPaths="false" ignoreRegex="(\[.+?\])|([-/].*)">
+    <metadata logical="true" mergeXPaths="false" mergeXPathInstances="true" separator="-" datePattern="yyyy" ignoreRegex="(\[.+?\])|([-/].*)">
         <name>PublicationYear</name>
         <xpath>/mods:mods/mods:originInfo/mods:dateCreated
         </xpath>
         <xpath>/mods:mods/mods:originInfo/mods:dateIssued</xpath>
     </metadata>
-    <metadata logical="true" datePattern="dd.MM.yyyy" mergeXPaths="false">
+    <metadata logical="true" mergeXPaths="false" mergeXPathInstances="true" separator="-" datePattern="dd.MM.yyyy">
         <name>Date</name>
         <xpath>/mods:mods/mods:originInfo/mods:dateCreated
         </xpath>
@@ -378,6 +378,9 @@
         <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='author']</xpath>
         <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='creator']</xpath>
         <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='correspondent']</xpath>
+        <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='addressee']</xpath>
+        <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='other']</xpath>
+        <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='otherroles']</xpath>
     </metadata>
         <metadata logical="true" mergeXPathInstances="false" mergeXPaths="false">
         <name>SubjectCorporate</name>
