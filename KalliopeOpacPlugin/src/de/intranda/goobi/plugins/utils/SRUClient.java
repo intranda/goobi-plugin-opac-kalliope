@@ -34,9 +34,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.http.client.HttpClient;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -44,6 +42,7 @@ import org.jdom2.JDOMException;
 
 import de.intranda.goobi.plugins.KalliopeOpacImport;
 import de.intranda.utils.DocumentUtils;
+import de.sub.goobi.helper.HttpClientHelper;
 import de.unigoettingen.sub.search.opac.ConfigOpacCatalogue;
 
 public class SRUClient {
@@ -88,23 +87,23 @@ public class SRUClient {
                 throw new SRUClientException(e);
             }
             logger.debug("SRU URL: " + urlString);
-            HttpClient client = new HttpClient();
-            GetMethod method = new GetMethod(urlString);
-            try {
-                client.executeMethod(method);
-                ret = method.getResponseBodyAsString();
-                if (!method.getResponseCharSet().equalsIgnoreCase(ENCODING)) {
-                    // If response XML is not UTF-8, re-encode
-                    ret = convertStringEncoding(ret, method.getResponseCharSet(), ENCODING);
-                }
+//            HttpClient client = new HttpClient();
+//            GetMethod method = new GetMethod(urlString);
+//            try {
+//                client.executeMethod(method);
+                ret = HttpClientHelper.getStringFromUrl(urlString);
+//                if (!method.getResponseCharSet().equalsIgnoreCase(ENCODING)) {
+//                    // If response XML is not UTF-8, re-encode
+//                    ret = convertStringEncoding(ret, method.getResponseCharSet(), ENCODING);
+//                }
                 return ret;
-            } catch (HttpException e) {
-                throw new SRUClientException(e.getMessage());
-            } catch (IOException e) {
-                throw new SRUClientException(e.getMessage());
-            } finally {
-                method.releaseConnection();
-            }
+//            } catch (HttpException e) {
+//                throw new SRUClientException(e.getMessage());
+//            } catch (IOException e) {
+//                throw new SRUClientException(e.getMessage());
+//            } finally {
+//                method.releaseConnection();
+//            }
         } else {
             throw new SRUClientException("No catalog provided for sru query");
         }

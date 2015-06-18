@@ -14,8 +14,8 @@
 	<property name="pluginFolderUnix" value="/opt/digiverso/goobi/plugins/opac/" />
 
 	<path id="classpath">
-	    <fileset dir="/opt/digiverso/goobi-jsf2/lib"/> 
-	    <fileset dir="/opt/digiverso/libs" />
+	    <fileset dir="/opt/digiverso/goobilibs/lib"/>
+		<fileset dir="/opt/digiverso/libs" />
 	</path>
 
 	<tstamp>

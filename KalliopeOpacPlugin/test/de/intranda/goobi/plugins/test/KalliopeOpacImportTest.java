@@ -39,7 +39,7 @@ public class KalliopeOpacImportTest {
 
     @Before
     public void setUp() throws Exception {
-        catalogue = new ConfigOpacCatalogue("Kalliope (SRU)", "SRU-Schnittstelle des Kalliope-Verbunds", "kalliope-verbund.info", "sru", null, 80, "utf-8", null, null, "Kalliope");
+        catalogue = new ConfigOpacCatalogue("Kalliope (SRU)", "SRU-Schnittstelle des Kalliope-Verbunds", "kalliope-verbund.info", "sru", null, 80, "utf-8", null, null, "Kalliope", "http://");
         prefs = new Prefs();
         prefs.loadPrefs(prefsPath);
         config = new XMLConfiguration(new File(configPath));
