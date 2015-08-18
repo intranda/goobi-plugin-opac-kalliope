@@ -22,10 +22,7 @@ package de.intranda.goobi.plugins.utils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+
 import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -34,7 +31,16 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 
-import org.apache.http.client.HttpClient;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
+
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -42,14 +48,12 @@ import org.jdom2.JDOMException;
 
 import de.intranda.goobi.plugins.KalliopeOpacImport;
 import de.intranda.utils.DocumentUtils;
-import de.sub.goobi.helper.HttpClientHelper;
 import de.unigoettingen.sub.search.opac.ConfigOpacCatalogue;
 
 public class SRUClient {
 
     private static final Logger logger = Logger.getLogger(KalliopeOpacImport.class);
-    private static final String ENCODING = "UTF-8";
-
+    
     /**
      * Queries the given catalog via Z.3950 (SRU) and returns its response.
      * 
@@ -57,7 +61,7 @@ public class SRUClient {
      * @param query The query.
      * @param recordSchema The expected record schema.
      * @return Query result XML string.
-     * @throws SRUClientException 
+     * @throws SRUClientException
      */
     public static String querySRU(ConfigOpacCatalogue cat, String query, String recordSchema) throws SRUClientException {
         String ret = null;
@@ -73,42 +77,66 @@ public class SRUClient {
                 urlBuilder.append("http://");
                 urlBuilder.append(cat.getAddress());
                 urlBuilder.append(":" + cat.getPort());
-                urlBuilder.append("/" + cat.getDatabase());                   
+                urlBuilder.append("/" + cat.getDatabase());
                 urlBuilder.append("?version=1.2");
                 urlBuilder.append("&operation=searchRetrieve");
                 urlBuilder.append("&query=" + query);
                 urlBuilder.append("&maximumRecords=100");
                 urlBuilder.append("&recordSchema=" + recordSchema);
                 urlString = urlBuilder.toString();
-//                URI url = new URI("http", null, cat.getAddress(), cat.getPort(), "/" + cat.getDatabase(), urlBuilder.toString(), null);
-//                urlString = url.toString();     
-//                urlString = URLEncoder.encode(urlString, "utf-8");
             } catch (UnsupportedEncodingException e) {
                 throw new SRUClientException(e);
             }
             logger.debug("SRU URL: " + urlString);
-//            HttpClient client = new HttpClient();
-//            GetMethod method = new GetMethod(urlString);
-//            try {
-//                client.executeMethod(method);
-                ret = HttpClientHelper.getStringFromUrl(urlString);
-//                if (!method.getResponseCharSet().equalsIgnoreCase(ENCODING)) {
-//                    // If response XML is not UTF-8, re-encode
-//                    ret = convertStringEncoding(ret, method.getResponseCharSet(), ENCODING);
-//                }
-                return ret;
-//            } catch (HttpException e) {
-//                throw new SRUClientException(e.getMessage());
-//            } catch (IOException e) {
-//                throw new SRUClientException(e.getMessage());
-//            } finally {
-//                method.releaseConnection();
-//            }
+         
+            ret = getStringFromUrl(urlString);
+            
+            return ret;
+            
         } else {
             throw new SRUClientException("No catalog provided for sru query");
         }
 
     }
+
+    public static String getStringFromUrl(String url) {
+        String response = "";
+        CloseableHttpClient client = null;
+        HttpGet method = new HttpGet(url);
+        client = HttpClientBuilder.create().build();
+        try {
+            response = client.execute(method, stringResponseHandler);
+        } catch (IOException e) {
+            logger.error("Cannot execute URL " + url, e);
+        } finally {
+            method.releaseConnection();
+
+            if (client != null) {
+                try {
+                    client.close();
+                } catch (IOException e) {
+                    logger.error(e);
+                }
+            }
+        }
+        return response;
+    }
+
+    public static ResponseHandler<String> stringResponseHandler = new ResponseHandler<String>() {
+        @Override
+        public String handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
+            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+                logger.error("Wrong status code : " + response.getStatusLine().getStatusCode());
+                return null;
+            }
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                return EntityUtils.toString(entity);
+            } else {
+                return null;
+            }
+        }
+    };
 
     /**
      * Converts a <code>String</code> from one given encoding to the other.
@@ -146,8 +174,10 @@ public class SRUClient {
             return null;
         }
     }
-    
+
     public static class SRUClientException extends Exception {
+
+        private static final long serialVersionUID = -1016166144685656635L;
 
         public SRUClientException() {
             super();
