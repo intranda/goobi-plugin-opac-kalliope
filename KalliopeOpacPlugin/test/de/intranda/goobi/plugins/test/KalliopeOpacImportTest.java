@@ -3,6 +3,8 @@ package de.intranda.goobi.plugins.test;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.XMLConfiguration;
@@ -39,7 +41,9 @@ public class KalliopeOpacImportTest {
 
     @Before
     public void setUp() throws Exception {
-        catalogue = new ConfigOpacCatalogue("Kalliope (SRU)", "SRU-Schnittstelle des Kalliope-Verbunds", "kalliope-verbund.info", "sru", null, 80, "utf-8", null, null, "Kalliope", "http://");
+    	Map<String, String> searchList = new HashMap<>();
+    	searchList.put("Identifier", "12");
+        catalogue =  new ConfigOpacCatalogue("Kalliope (SRU)", "SRU-Schnittstelle des Kalliope-Verbunds", "kalliope-verbund.info", "sru", null, 80, "utf-8", null, null, "Kalliope", "http://", searchList);
         prefs = new Prefs();
         prefs.loadPrefs(prefsPath);
         config = new XMLConfiguration(new File(configPath));

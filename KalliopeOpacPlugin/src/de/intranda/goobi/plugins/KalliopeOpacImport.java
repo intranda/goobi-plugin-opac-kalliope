@@ -361,7 +361,6 @@ public class KalliopeOpacImport implements IOpacPlugin {
         return PLUGIN_NAME;
     }
 
-    @Override
     public String getDescription() {
         return PLUGIN_NAME + " " + PLUGIN_VERSION;
     }
@@ -369,18 +368,17 @@ public class KalliopeOpacImport implements IOpacPlugin {
     @Override
     public ConfigOpacDoctype getOpacDocType() {
         try {
-            ConfigOpac co = new ConfigOpac();
+            ConfigOpac co = ConfigOpac.getInstance();
             ConfigOpacDoctype cod = co.getDoctypeByMapping(this.gattung.substring(0, 2), this.coc.getTitle());
             if (cod == null) {
 
-                cod = new ConfigOpac().getAllDoctypes().get(0);
+                cod = ConfigOpac.getInstance().getAllDoctypes().get(0);
                 this.gattung = cod.getMappings().get(0);
 
             }
             return cod;
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("OpacDoctype unknown", e);
-
             return null;
         }
     }
