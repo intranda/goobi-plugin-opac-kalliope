@@ -24,7 +24,7 @@ pipeline {
 
     stage('build') {
       steps {
-        sh 'mvn -f goobi-plugin-opac-kalliope/pom.xml install'
+        sh 'mvn -f KalliopeOpacPlugin/pom.xml install'
         recordIssues enabledForFailure: true, aggregatingResults: true, tools: [java(), javaDoc()]
       }
     }
@@ -36,7 +36,7 @@ pipeline {
         }
       }
       steps {
-        sh 'mvn -f goobi-plugin-opac-kalliope/pom.xml deploy'
+        sh 'mvn -f KalliopeOpacPlugin/pom.xml deploy'
       }
     }
   }
