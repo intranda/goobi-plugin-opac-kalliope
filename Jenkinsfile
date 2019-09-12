@@ -12,7 +12,6 @@ pipeline {
   }
 
   triggers {
-    upstream 'goobi-workflow/goobi/master'
   }
   
   stages {
@@ -36,7 +35,6 @@ pipeline {
         }
       }
       steps {
-        sh 'mvn -f KalliopeOpacPlugin/pom.xml deploy'
       }
     }
   }
