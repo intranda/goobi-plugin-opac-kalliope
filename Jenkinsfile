@@ -25,6 +25,7 @@ pipeline {
         recordIssues enabledForFailure: true, aggregatingResults: true, tools: [java(), javaDoc()]
       }
     }
+  }
 
   post {
     success {
