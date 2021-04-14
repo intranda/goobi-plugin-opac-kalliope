@@ -24,12 +24,16 @@ import de.unigoettingen.sub.search.opac.ConfigOpacCatalogue;
 public class KalliopeOpacImportTest {
 
     private static final String prefsPath = "resources/ruleset_gbv_sim.xml";
+    private static final String prefsPathRostock = "resources/Handschriften_Produktion_20150609.xml";
     private static final String configPath = "resources/plugin_KalliopeOpacImport.xml";
+    private static final String configPathRostock = "resources/plugin_KalliopeOpacImport_Rostock.xml";
     
     private ConfigOpacCatalogue catalogue;
     private Prefs prefs;
+    private Prefs prefsRostock;
     private Configuration config;
-    
+    private Configuration configRostock;
+
     
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -46,7 +50,11 @@ public class KalliopeOpacImportTest {
         catalogue =  new ConfigOpacCatalogue("Kalliope (SRU)", "SRU-Schnittstelle des Kalliope-Verbunds", "kalliope-verbund.info", "sru", null, 80, "utf-8", null, null, "Kalliope", "http://", searchList);
         prefs = new Prefs();
         prefs.loadPrefs(prefsPath);
+        prefsRostock = new Prefs();
+        prefsRostock.loadPrefs(prefsPathRostock);
         config = new XMLConfiguration(new File(configPath));
+        configRostock = new XMLConfiguration(new File(configPathRostock));
+
     
     }
     @After
@@ -75,4 +83,23 @@ public class KalliopeOpacImportTest {
         
     }
 
+
+    @Test
+    public void testRetrieveFileformatRostock() throws ImportPluginException {
+        KalliopeOpacImport importer = new KalliopeOpacImport(configRostock);
+        
+        String inSuchfeld = "ead.id";
+        String inSuchbegriff = "DE-611-HS-3468675";
+
+        try {
+            Fileformat ff = importer.search(inSuchfeld, inSuchbegriff, catalogue, prefsRostock);
+            System.out.println(ff.getDigitalDocument());
+            File outputFile = new File("output", "meta.xml");
+            ff.write(outputFile.getAbsolutePath());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        
+    }
 }

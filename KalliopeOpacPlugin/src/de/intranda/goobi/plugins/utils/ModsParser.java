@@ -113,14 +113,19 @@ public class ModsParser {
                 setDatePatterns(eleMetadata);
 
                 String mdName = eleMetadata.getChildTextTrim("name", null);
-                MetadataType mdType = prefs.getMetadataTypeByName(mdName);
-                if (mdType != null) {
-                    List<Element> eleXpathList = eleMetadata.getChildren("xpath", null);
-                    if (mdType.getIsPerson() || "Person".equals(mdName)) {
-                        writePersonXPaths(eleXpathList, mdType, modsDoc);
-                    } else {
-                        writeMetadataXPaths(eleXpathList, mdType, modsDoc);
-                    }
+                if("Person".equals(mdName)) {
+                	List<Element> eleXpathList = eleMetadata.getChildren("xpath", null);
+                	writePersonXPaths(eleXpathList, modsDoc);
+                } else {                	
+                	MetadataType mdType = prefs.getMetadataTypeByName(mdName);
+                	if (mdType != null) {
+                		List<Element> eleXpathList = eleMetadata.getChildren("xpath", null);
+                		if (mdType.getIsPerson()) {
+                			writePersonXPaths(eleXpathList, modsDoc);
+                		} else {
+                			writeMetadataXPaths(eleXpathList, mdType, modsDoc);
+                		}
+                	}
                 }
             }
         }
@@ -235,14 +240,14 @@ public class ModsParser {
         return mdMatrix;
     }
 
-    private void writePersonXPaths(List<Element> eleXpathList, MetadataType mdType, Document modsDoc) {
+    private void writePersonXPaths(List<Element> eleXpathList, Document modsDoc) {
 
         for (Element eleXpath : eleXpathList) {
             String query = eleXpath.getTextTrim();
             XPathExpression<Element> xpath = XPathFactory.instance().compile(query, Filters.element(), null, NS_MODS);
             List<Element> nodeList = xpath.evaluate(modsDoc);
             if (nodeList != null) {
-                writePersonNodeValues(nodeList, mdType);
+                writePersonNodeValues(nodeList);
             }
         }
     }
@@ -323,7 +328,7 @@ public class ModsParser {
         }
     }
 
-    private void writePersonNodeValues(List<Element> xPathNodeList, MetadataType mdType) {
+    private void writePersonNodeValues(List<Element> xPathNodeList) {
         for (Element node : xPathNodeList) {
             String displayName = "";
             String firstName = "";
@@ -355,7 +360,7 @@ public class ModsParser {
             }
 
             // set metadata type to role
-            mdType = setPersonRoleTerm(roleTerm, typeName);
+            MetadataType mdType = setPersonRoleTerm(roleTerm, typeName);
 
             //get first and last name from displayName if required
             if (firstName.isEmpty() && lastName.isEmpty() && displayName.contains(",")) {

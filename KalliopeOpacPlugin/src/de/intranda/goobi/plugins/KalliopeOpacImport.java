@@ -138,7 +138,7 @@ public class KalliopeOpacImport implements IOpacPlugin {
         this.coc = catalogue;
         this.prefs = inPrefs;
         Fileformat ff = null;
-        String recordSchema = "mods";
+        String recordSchema = "mods37";
 
         try {
             String answer = SRUClient.querySRU(catalogue, inSuchfeld + "=" + inSuchbegriff, recordSchema);

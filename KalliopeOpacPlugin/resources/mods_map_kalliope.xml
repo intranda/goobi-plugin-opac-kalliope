@@ -3,7 +3,18 @@
     <metadata logical="true">
         <name>CatalogIDDigital</name>
         <xpath>/mods:mods/mods:recordInfo/mods:recordIdentifier</xpath>
-        <!-- <xpath>/mods:mods/mods:location/mods:holdingSimple/mods:copyInformation/mods:pieceDesignation</xpath> -->
+    </metadata>
+    <metadata logical="true">
+        <name>CatalogIDKalliope</name>
+        <xpath>/mods:mods/mods:recordInfo/mods:recordIdentifier</xpath>
+    </metadata>
+    <metadata physical="true" logical="true">
+        <name>shelfmarksource</name>
+        <xpath>/mods:mods/mods:location/mods:shelfLocator</xpath>
+    </metadata>
+    <metadata physical="true" logical="true">
+        <name>PhysicalLocation</name>
+        <xpath>/mods:mods/mods:location/mods:physicalLocation</xpath>
     </metadata>
     <metadata logical="true" separator=" ">
         <name>TitleDocMain</name>
@@ -54,10 +65,6 @@
         <name>location</name>
         <xpath>/mods:mods/mods:location</xpath>
     </metadata>
-    <metadata physical="true" logical="true">
-        <name>shelfmarksource</name>
-        <xpath>/mods:mods/mods:location/mods:shelfLocator</xpath>
-    </metadata>
     <metadata logical="true">
         <name>SizeSourcePrint</name>
         <xpath>/mods:mods/mods:physicalDescription/mods:extent</xpath>
@@ -75,16 +82,23 @@
         <name>DocLanguage</name>
         <xpath>/mods:mods/mods:language/mods:languageTerm[@type='code'][@authority='iso639-2b']
         </xpath>
-        <xpath>/mods:mods/mods:originInfo/mods:languageOfCataloging/mods:languageTerm
+        <!--The following mappings are actually about the languages of the record, not the document -->
+		<!--<xpath>/mods:mods/mods:originInfo/mods:languageOfCataloging/mods:languageTerm[@type='code'][@authority='iso639-2b']
         </xpath>
-        <xpath>/mods:mods/mods:recordInfo/mods:languageOfCataloging/mods:languageTerm
-        </xpath>
+        <xpath>/mods:mods/mods:recordInfo/mods:languageOfCataloging/mods:languageTerm[@type='code'][@authority='iso639-2b']
+        </xpath>-->
     </metadata>
     <metadata logical="true" mergeXPaths="false" mergeXPathInstances="true" separator="-" datePattern="yyyy" ignoreRegex="(\[.+?\])|([-/].*)">
         <name>PublicationYear</name>
-        <xpath>/mods:mods/mods:originInfo/mods:dateCreated
+	<xpath>/mods:mods/mods:originInfo/mods:dateCreated[@encoding='w3cdtf'][@keyDate='yes']
         </xpath>
-        <xpath>/mods:mods/mods:originInfo/mods:dateIssued</xpath>
+        <xpath>/mods:mods/mods:originInfo/mods:dateIssued[@encoding='w3cdtf'][@keyDate='yes']</xpath>
+    </metadata>
+    <metadata logical="true" mergeXPaths="false" mergeXPathInstances="true" separator="-" datePattern="yyyy" ignoreRegex="(\[.+?\])|([-/].*)">
+        <name>PublicationYearDisplay</name>
+        <xpath>/mods:mods/mods:originInfo/mods:dateCreated[not(@encoding)]
+        </xpath>
+        <xpath>/mods:mods/mods:originInfo/mods:dateIssued[not(@encoding)]</xpath>
     </metadata>
     <metadata logical="true" mergeXPaths="false" mergeXPathInstances="true" separator="-" datePattern="dd.MM.yyyy">
         <name>Date</name>
@@ -93,13 +107,13 @@
         <xpath>/mods:mods/mods:originInfo/mods:dateIssued</xpath>
     </metadata>
     <metadata logical="true">
-        <name>PublicationStart</name>
-        <xpath>/mods:mods/mods:originInfo/mods:dateIssued[@point='start']
+        <name>DateOfPublicationStart</name>
+        <xpath>/mods:mods/mods:originInfo/mods:dateIssued[@point='start'][@encoding='w3cdtf']
         </xpath>
     </metadata>
     <metadata logical="true">
-        <name>PublicationEnd</name>
-        <xpath>/mods:mods/mods:originInfo/mods:dateIssued[@point='end']
+        <name>DateOfPublicationEnd</name>
+        <xpath>/mods:mods/mods:originInfo/mods:dateIssued[@point='end'][@encoding='w3cdtf']
         </xpath>
     </metadata>
     <metadata logical="true">
@@ -115,6 +129,7 @@
     <metadata logical="true">
         <name>PublisherName</name>
         <xpath>/mods:mods/mods:originInfo[not(@displayLabel)]/mods:publisher
+        <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='isb'[@type='code']]/mods:namepart</xpath>
         </xpath>
     </metadata>
     <metadata logical="true">
@@ -145,6 +160,11 @@
     <metadata logical="true">
         <name>AccessOptions</name>
         <xpath>/mods:mods/mods:accessOptions
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>AccessLicense</name>
+        <xpath>/mods:mods/mods:accessCondition
         </xpath>
     </metadata>
     <metadata logical="true" ignoreRegex="[\[\(](.+?)[\]\)]">
@@ -179,6 +199,7 @@
                 <roleTerm>fot</roleTerm>
                 <roleTerm>pht</roleTerm>
                 <roleTerm>photographer</roleTerm>
+                <roleTerm>Fotograph</roleTerm>
             </person>
             <person>
                 <name>Binder</name>
@@ -234,11 +255,20 @@
                 <roleTerm>autor</roleTerm>
                 <roleTerm>author</roleTerm>
                 <roleTerm>creator</roleTerm>
+                <roleTerm>cre</roleTerm>
+                <roleTerm>Verfasser</roleTerm>
+                <roleTerm>Urheber</roleTerm>
             </person>
             <person>
                 <name>Composer</name>
                 <roleTerm>composer</roleTerm>
                 <roleTerm>cmp</roleTerm>
+                <roleTerm>Komponist</roleTerm>
+            </person>
+            <person>
+                <name>Librettist</name>
+                <roleTerm>Librettist</roleTerm>
+                <roleTerm>lbt</roleTerm>
             </person>
             <person>
                 <name>Commentator</name>
@@ -264,6 +294,7 @@
                 <roleTerm>trl</roleTerm>
                 <roleTerm>traductor</roleTerm>
                 <roleTerm>translator</roleTerm>
+                <roleTerm>Übersetzer</roleTerm>
             </person>
             <person>
                 <name>Actor</name>
@@ -277,6 +308,7 @@
                 <roleTerm>dib</roleTerm>
                 <roleTerm>illustrador</roleTerm>
                 <roleTerm>dibujante</roleTerm>
+                <roleTerm>Illustrator</roleTerm>
             </person>
             <person>
                 <name>Director</name>
@@ -289,6 +321,8 @@
                 <roleTerm>editor</roleTerm>
                 <roleTerm>ed</roleTerm>
                 <roleTerm>edt</roleTerm>
+                <roleTerm>Bearbeiter</roleTerm>
+                <roleTerm>Redakteur</roleTerm>
             </person>
             <person>
                 <name>Teacher</name>
@@ -331,6 +365,7 @@
                 <name>Addressee</name>
                 <roleTerm>addressee</roleTerm>
                 <roleTerm>rcp</roleTerm>
+                <roleTerm>Adressat</roleTerm>
             </person>
                         <person>
                 <name>Corresondent</name>
@@ -341,17 +376,40 @@
                 <name>Signer</name>
                 <roleTerm>signer</roleTerm>
                 <roleTerm>sgn</roleTerm>
+                <roleTerm>Unterzeichner</roleTerm>
             </person>
                         <person>
                 <name>OtherPerson</name>
                 <roleTerm>other</roleTerm>
                 <roleTerm>oth</roleTerm>
+                <roleTerm>Sonstige</roleTerm>
             </person>
-                        <person>
+            <person>
                 <name>AuthorPrePostface</name>
                 <roleTerm>aft</roleTerm>
                 <roleTerm>aui</roleTerm>
                 <roleTerm>wpr</roleTerm>
+            </person>
+            <person>
+                <name>Honoree</name>
+                <roleTerm>Gefeierte Person</roleTerm>
+                <roleTerm>hnr</roleTerm>
+            </person>
+            <person>
+                <name>Dedicatee</name>
+                <roleTerm>dte</roleTerm>
+                <roleTerm>Widmungsempfänger</roleTerm>
+            </person>
+            <person>
+                <name>Interviewer</name>
+                <roleTerm>ivr</roleTerm>
+                <roleTerm>inv</roleTerm>
+                <roleTerm>Interviewer</roleTerm>
+            </person>
+            <person>
+                <name>Interviewee</name>
+                <roleTerm>ive</roleTerm>
+                <roleTerm>Interviewter</roleTerm>
             </person>
         </roleMapping>
     </metadata>
@@ -397,11 +455,16 @@
     </metadata>
     <metadata logical="true" separator="::">
         <name>Taxonomy</name>
+        <xpath>/mods:mods/mods:subject/mods:titleInfo/mods:title</xpath>
         <xpath>/mods:mods/mods:subject</xpath>
     </metadata>
     <metadata logical="true">
         <name>Classification</name>
         <xpath>/mods:mods/mods:classification</xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>GenreType</name>
+        <xpath>/mods:mods/mods:genre</xpath>
     </metadata>
 <!--    <metadata physical="true">
         <name>datedigit</name>
@@ -496,6 +559,10 @@
         <xpath>/mods:mods/mods:relatedItem[@type='isReferencedBy']/mods:name
         </xpath>
         <xpath>/mods:mods/mods:relatedItem[@type='isReferencedBy']/mods:part/mods:text
+        </xpath>
+        <xpath>/mods:mods/mods:relatedItem[@type='isReferencedBy']/mods:titleInfo/mods:title
+        </xpath>
+        <xpath>/mods:mods/mods:relatedItem[@type='constituent']/mods:titleInfo/mods:title
         </xpath>
     </metadata>
     <metadata logical="true">
