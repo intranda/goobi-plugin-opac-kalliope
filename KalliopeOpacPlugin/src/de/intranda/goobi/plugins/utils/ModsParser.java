@@ -388,7 +388,7 @@ public class ModsParser {
                     person.setRole(mdType.getName());
                     createAuthorityFile(person, node);
                 } catch (MetadataTypeNotAllowedException e) {
-                    logger.error("Failed to create person metadata " + mdType.getName());
+                    logger.error("Failed to create person " + typeName + " " + roleTerm);
                 }
 
                 if (person != null) {
