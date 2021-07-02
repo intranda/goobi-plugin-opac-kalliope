@@ -6,7 +6,7 @@
   <properties>
     <jar.name>plugin_intranda_opac_kalliope</jar.name>
     <dest.folder>/opt/digiverso/goobi/plugins/opac/</dest.folder>
-    <goobi.version>3.0.60</goobi.version>
+    <goobi.version>21.06.6</goobi.version>
   </properties>
   <distributionManagement>
     <repository>
@@ -82,6 +82,7 @@
                   <Implementation-Version>${project.version}</Implementation-Version>
                   <Implementation-SCM-Revision>${buildNumber}</Implementation-SCM-Revision>
                   <Implementation-SCM-Branch>${scmBranch}</Implementation-SCM-Branch>
+                  <Goobi-Version>${goobi.version}</Goobi-Version>
                 </manifestEntries>
               </manifestSection>
             </manifestSections>
