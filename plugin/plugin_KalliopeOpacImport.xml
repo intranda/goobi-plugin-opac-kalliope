@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config_plugin>
+    <charset>utf-8</charset>
+    <mapping>/opt/digiverso/goobi/xslt/mods_map_kalliope.xml</mapping>
+    <defaultDocType>Monograph</defaultDocType>
+    <defaultPicaType>Aa</defaultPicaType>
+</config_plugin>
