@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mets:mets OBJID="" xsi:schemaLocation="http://www.loc.gov/standards/premis/ http://www.loc.gov/standards/premis/v2/premis-v2-0.xsd http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd http://www.loc.gov/standards/mix/ http://www.loc.gov/standards/mix/mix.xsd" xmlns:mets="http://www.loc.gov/METS/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:goobi="http://meta.goobi.org/v1.5.1/">
-   <mets:metsHdr CREATEDATE="2021-04-14T08:12:30Z">
+   <mets:metsHdr CREATEDATE="2021-11-29T14:02:58Z">
       <mets:agent OTHERTYPE="SOFTWARE" ROLE="CREATOR" TYPE="OTHER">
-         <mets:name>Goobi - 52830 - 2020-08-02 18:14:15+0000</mets:name>
+         <mets:name>Goobi - e164f - 2021-11-05T09:17:01Z</mets:name>
          <mets:note>Goobi</mets:note>
       </mets:agent>
    </mets:metsHdr>
@@ -12,31 +12,15 @@
             <mods:mods>
                <mods:extension>
                   <goobi:goobi>
-                     <goobi:metadata name="CatalogIDKalliope">DE-611-HS-3468675</goobi:metadata>
-                     <goobi:metadata name="shelfmarksource">Mss. Meckl. P 71.a, Bl. 211-212</goobi:metadata>
-                     <goobi:metadata authority="German ISIL- and Library Codes Agency" authorityURI="http://ld.zdb-services.de/resource/organisations/" name="PhysicalLocation" valueURI="http://ld.zdb-services.de/resource/organisations/DE-28">Universitätsbibliothek Rostock</goobi:metadata>
-                     <goobi:metadata name="TitleDocMain">Brief von Oluf Gerhard Tychsen an Carl Christian Cornelius</goobi:metadata>
+                     <goobi:metadata name="CatalogIDDigital">DE-611-HS-1463580</goobi:metadata>
+                     <goobi:metadata name="shelfmarksource">HA SIM/1a/5,4</goobi:metadata>
+                     <goobi:metadata authority="German ISIL- and Library Codes Agency" authorityURI="http://ld.zdb-services.de/resource/organisations/" name="PhysicalLocation" valueURI="http://ld.zdb-services.de/resource/organisations/DE-B763">Staatliches Institut für Musikforschung</goobi:metadata>
+                     <goobi:metadata name="TitleDocMain">Verzeichnis alterthümlicher Musikinstrumente Paul de Wit Leipzig</goobi:metadata>
+                     <goobi:metadata name="SizeSourcePrint">18 Bl., 23 S.</goobi:metadata>
                      <goobi:metadata authority="iso639-2b" authorityURI="http://id.loc.gov/vocabulary/iso639-2/" name="DocLanguage" valueURI="http://id.loc.gov/vocabulary/iso639-2/ger">ger</goobi:metadata>
-                     <goobi:metadata name="PublicationYear">1775</goobi:metadata>
-                     <goobi:metadata name="PublicationYearDisplay">1775</goobi:metadata>
-                     <goobi:metadata name="PlaceOfPublication" valueURI="https://d-nb.info/gnd/4227578-7">Bützow</goobi:metadata>
-                     <goobi:metadata authority="DE-588" authorityURI="https://d-nb.info/gnd/" name="GenreType" valueURI="https://d-nb.info/gnd/4008240-4">Brief</goobi:metadata>
-                     <goobi:metadata name="Author" type="person">
-                        <goobi:lastName>Tychsen</goobi:lastName>
-                        <goobi:firstName>Oluf Gerhard</goobi:firstName>
-                        <goobi:authorityID>DE-588</goobi:authorityID>
-                        <goobi:authorityURI>https://d-nb.info/gnd/</goobi:authorityURI>
-                        <goobi:authorityValue>119120577</goobi:authorityValue>
-                        <goobi:displayName>Tychsen, Oluf Gerhard</goobi:displayName>
-                     </goobi:metadata>
-                     <goobi:metadata name="Addressee" type="person">
-                        <goobi:lastName>Cornelius</goobi:lastName>
-                        <goobi:firstName>Carl Christian</goobi:firstName>
-                        <goobi:authorityID>DE-611</goobi:authorityID>
-                        <goobi:authorityURI>https://kalliope-verbund.info/agents/</goobi:authorityURI>
-                        <goobi:authorityValue>841221</goobi:authorityValue>
-                        <goobi:displayName>Cornelius, Carl Christian</goobi:displayName>
-                     </goobi:metadata>
+                     <goobi:metadata name="PublicationYear">1887</goobi:metadata>
+                     <goobi:metadata name="Date">1887-14.07.1888-1887-14.07.1888 [letzter Eintrag]</goobi:metadata>
+                     <goobi:metadata name="PlaceOfPublication" valueURI="https://d-nb.info/gnd/4005728-8">Berlin</goobi:metadata>
                   </goobi:goobi>
                </mods:extension>
             </mods:mods>
@@ -49,8 +33,8 @@
             <mods:mods>
                <mods:extension>
                   <goobi:goobi>
-                     <goobi:metadata name="shelfmarksource">Mss. Meckl. P 71.a, Bl. 211-212</goobi:metadata>
-                     <goobi:metadata authority="German ISIL- and Library Codes Agency" authorityURI="http://ld.zdb-services.de/resource/organisations/" name="PhysicalLocation" valueURI="http://ld.zdb-services.de/resource/organisations/DE-28">Universitätsbibliothek Rostock</goobi:metadata>
+                     <goobi:metadata name="shelfmarksource">HA SIM/1a/5,4</goobi:metadata>
+                     <goobi:metadata authority="German ISIL- and Library Codes Agency" authorityURI="http://ld.zdb-services.de/resource/organisations/" name="PhysicalLocation" valueURI="http://ld.zdb-services.de/resource/organisations/DE-B763">Staatliches Institut für Musikforschung</goobi:metadata>
                   </goobi:goobi>
                </mods:extension>
             </mods:mods>
@@ -58,7 +42,7 @@
       </mets:mdWrap>
    </mets:dmdSec>
    <mets:structMap TYPE="LOGICAL">
-      <mets:div DMDID="DMDLOG_0000" ID="LOG_0000" TYPE="Section_Kalliope"/>
+      <mets:div DMDID="DMDLOG_0000" ID="LOG_0000" TYPE="ArchiveDocument"/>
    </mets:structMap>
    <mets:structMap TYPE="PHYSICAL">
       <mets:div DMDID="DMDPHYS_0000" ID="PHYS_0000" TYPE="BoundBook"/>

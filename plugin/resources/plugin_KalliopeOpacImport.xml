@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config_plugin>
     <charset>utf-8</charset>
-    <mapping>/opt/digiverso/git/goobi-plugin-opac-kalliope/KalliopeOpacPlugin/resources/mods_map_kalliope.xml</mapping>
+    <mapping>/opt/digiverso/git/goobi-plugin-opac-kalliope/plugin/resources/mods_map_kalliope.xml</mapping>
     <defaultDocType>ArchiveDocument</defaultDocType>
     <defaultPicaType>Ag</defaultPicaType>
 </config_plugin>
