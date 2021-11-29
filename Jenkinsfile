@@ -29,7 +29,7 @@ pipeline {
 
   post {
     success {
-      archiveArtifacts artifacts: '**/target/*.jar, plugin/plugin_KalliopeOpacImport.xml', 'plugin/mods_map_kalliope.xml'  , fingerprint: true, onlyIfSuccessful: true
+      archiveArtifacts artifacts: '**/target/*.jar, plugin/plugin_KalliopeOpacImport.xml, plugin/mods_map_kalliope.xml', fingerprint: true, onlyIfSuccessful: true
     }
     changed {
       emailext(
