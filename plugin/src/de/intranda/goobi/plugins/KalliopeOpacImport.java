@@ -22,16 +22,19 @@ package de.intranda.goobi.plugins;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.StringTokenizer;
 
-import net.xeoh.plugins.base.annotations.PluginImplementation;
-
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.goobi.production.enums.PluginType;
 import org.goobi.production.plugin.interfaces.IOpacPlugin;
@@ -40,18 +43,6 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.filter.Filters;
 
-import ugh.dl.DigitalDocument;
-import ugh.dl.DocStruct;
-import ugh.dl.DocStructType;
-import ugh.dl.Fileformat;
-import ugh.dl.Metadata;
-import ugh.dl.Person;
-import ugh.dl.Prefs;
-import ugh.exceptions.PreferencesException;
-import ugh.exceptions.TypeNotAllowedAsChildException;
-import ugh.exceptions.TypeNotAllowedForParentException;
-import ugh.exceptions.UGHException;
-import ugh.fileformats.mets.MetsMods;
 import de.intranda.goobi.plugins.utils.ModsParser;
 import de.intranda.goobi.plugins.utils.ModsParser.ParserException;
 import de.intranda.goobi.plugins.utils.SRUClient;
@@ -63,6 +54,20 @@ import de.sub.goobi.helper.exceptions.ImportPluginException;
 import de.unigoettingen.sub.search.opac.ConfigOpac;
 import de.unigoettingen.sub.search.opac.ConfigOpacCatalogue;
 import de.unigoettingen.sub.search.opac.ConfigOpacDoctype;
+import net.xeoh.plugins.base.annotations.PluginImplementation;
+import ugh.dl.DigitalDocument;
+import ugh.dl.DocStruct;
+import ugh.dl.DocStructType;
+import ugh.dl.Fileformat;
+import ugh.dl.Metadata;
+import ugh.dl.MetadataType;
+import ugh.dl.Person;
+import ugh.dl.Prefs;
+import ugh.exceptions.PreferencesException;
+import ugh.exceptions.TypeNotAllowedAsChildException;
+import ugh.exceptions.TypeNotAllowedForParentException;
+import ugh.exceptions.UGHException;
+import ugh.fileformats.mets.MetsMods;
 
 @PluginImplementation
 public class KalliopeOpacImport implements IOpacPlugin {
@@ -126,7 +131,7 @@ public class KalliopeOpacImport implements IOpacPlugin {
 
     private String getMappedSearchField(String fieldCode) {
         String fieldName = searchFieldMap.get(fieldCode);
-        if(fieldName != null) {
+        if (fieldName != null) {
             return fieldName;
         } else {
             return fieldCode;
@@ -143,7 +148,7 @@ public class KalliopeOpacImport implements IOpacPlugin {
         try {
             String answer = SRUClient.querySRU(catalogue, inSuchfeld + "=" + inSuchbegriff, recordSchema);
             List<Element> records = getModsRecords(answer, this.inputEncoding);
-            
+
             hitcount = records.size();
             if (hitcount < 1) {
                 throw new ImportPluginException("Unable to find record");
@@ -162,10 +167,31 @@ public class KalliopeOpacImport implements IOpacPlugin {
             DocStruct boundBook = ff.getDigitalDocument().getPhysicalDocStruct();
             parser.parseModsSection(topStruct, anchor, boundBook, recordElement);
 
-            String anchorId = parser.getAchorID(recordElement);
-            if (anchorId != null) {
-                Fileformat aff = retrieveFileformat("", anchorId, catalogue, inPrefs);
-                attachToAnchor(ff.getDigitalDocument(), aff);
+            if (config.getBoolean("writeTempMetadataFile", false)) {
+                String catalogIDDigital = topStruct.getAllMetadata()
+                        .stream()
+                        .filter(md -> "CatalogIDDigital".equals(Optional.ofNullable(md).map(Metadata::getType).map(MetadataType::getName).orElse("")))
+                        .findAny()
+                        .map(Metadata::getValue)
+                        .orElse("");
+                if (StringUtils.isNotBlank(catalogIDDigital)) {
+                    Path importDataFilePath = Paths.get(ConfigurationHelper.getInstance().getTemporaryFolder(), catalogIDDigital);
+                    try {
+                        FileUtils.write(importDataFilePath.toFile(), answer, "utf-8");
+                    } catch (IOException e) {
+                        logger.error("Unable to write kalliope mods data to " + importDataFilePath + ". Reason: " + e.toString());
+                    }
+                }
+            }
+
+            try {
+                String anchorId = parser.getAchorID(recordElement);
+                if (anchorId != null) {
+                    Fileformat aff = retrieveFileformat("", anchorId, catalogue, inPrefs);
+                    attachToAnchor(ff.getDigitalDocument(), aff);
+                }
+            } catch (Exception e) {
+                logger.warn("Unable to append record to anchor: " + e.toString());
             }
             createAtstsl(ff.getDigitalDocument());
             return ff;
@@ -271,11 +297,11 @@ public class KalliopeOpacImport implements IOpacPlugin {
         return ff;
     }
 
-    private List<Element> getModsRecords(String queryRespponse, String encoding) throws ImportPluginException {
+    private List<Element> getModsRecords(String queryResponse, String encoding) throws ImportPluginException {
         try {
-            Document wholeDoc = DocumentUtils.getDocumentFromString(queryRespponse, encoding);
+            Document wholeDoc = DocumentUtils.getDocumentFromString(queryResponse, encoding);
             Element root = wholeDoc.getRootElement();
-            //        System.out.println(DocumentUtils.getStringFromDocument(wholeDoc, "utf-8"));
+            //System.out.println(DocumentUtils.getStringFromDocument(wholeDoc, "utf-8"));
             Iterator<Element> iterator = root.getDescendants(Filters.element("mods", ModsParser.NS_MODS));
             List<Element> modsElements = new ArrayList<Element>();
             while (iterator.hasNext()) {
@@ -450,7 +476,7 @@ public class KalliopeOpacImport implements IOpacPlugin {
     public String getGattung() {
         return gattung;
     }
-    
+
     public static String getFullPluginName() {
         return PLUGIN_NAME + " " + PLUGIN_VERSION + " " + PLUGIN_BUILDDATE;
     }

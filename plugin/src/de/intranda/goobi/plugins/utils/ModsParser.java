@@ -682,7 +682,7 @@ public class ModsParser {
     }
 
     public static List<Element> findElement(String xPathQuery, Object source) {
-        XPathExpression<Element> xpath = XPathFactory.instance().compile(xPathQuery, Filters.element());
+        XPathExpression<Element> xpath = XPathFactory.instance().compile(xPathQuery, Filters.element(), null, NS_MODS);
         List<Element> nodeList = xpath.evaluate(source);
         return nodeList;
     }
@@ -694,7 +694,7 @@ public class ModsParser {
     }
 
     public String getAchorID(Object modsSource) {
-        String query = "relatedItem[@type='host']/identifier";
+        String query = "mods:relatedItem[@type='host']/mods:recordInfo/mods:recordIdentifier";
         List<Element> list = findElement(query, modsSource);
         if (list.size() > 0) {
             if (list.size() > 1) {

@@ -74,7 +74,7 @@ public class SRUClient {
             try {
                 query = URLEncoder.encode(query, "utf-8");
                 StringBuilder urlBuilder = new StringBuilder();
-                urlBuilder.append("http://");
+                urlBuilder.append(cat.getProtocol());
                 urlBuilder.append(cat.getAddress());
                 urlBuilder.append(":" + cat.getPort());
                 urlBuilder.append("/" + cat.getDatabase());
