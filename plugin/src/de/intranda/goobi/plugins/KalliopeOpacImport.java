@@ -92,6 +92,8 @@ public class KalliopeOpacImport implements IOpacPlugin {
 
     private Map<String, String> searchFieldMap;
 
+    private String docStructType = "";
+
     public KalliopeOpacImport() throws ImportPluginException {
         this.config = ConfigPlugins.getPluginConfig(this);
         init();
@@ -129,7 +131,22 @@ public class KalliopeOpacImport implements IOpacPlugin {
     @Override
     public Fileformat search(String inSuchfeld, String inSuchbegriff, ConfigOpacCatalogue catalogue, Prefs inPrefs) throws ImportPluginException {
         inSuchfeld = getMappedSearchField(inSuchfeld);
-        return retrieveFileformat(inSuchfeld, inSuchbegriff, catalogue, inPrefs);
+        Fileformat ff = retrieveFileformat(inSuchfeld, inSuchbegriff, catalogue, inPrefs);
+        this.docStructType = getLogicalDocType(ff);
+        return ff;
+    }
+
+    private String getLogicalDocType(Fileformat ff) throws ImportPluginException {
+        try {
+            DigitalDocument digitalDocument = ff.getDigitalDocument();
+            DocStruct ds = digitalDocument.getLogicalDocStruct();
+            if(ds.getType().isAnchor() && !ds.getAllChildren().isEmpty()) {
+                ds = ds.getAllChildren().get(0);
+            }
+            return ds.getType().getName();
+        } catch (PreferencesException e) {
+            throw new ImportPluginException("no digitial document created");
+        }
     }
 
     private String getMappedSearchField(String fieldCode) {
@@ -188,15 +205,15 @@ public class KalliopeOpacImport implements IOpacPlugin {
                 }
             }
 
-            try {
-                String anchorId = parser.getAchorID(recordElement);
-                if (anchorId != null) {
-                    Fileformat aff = retrieveFileformat("", anchorId, catalogue, inPrefs);
-                    attachToAnchor(ff.getDigitalDocument(), aff);
-                }
-            } catch (Exception e) {
-                logger.warn("Unable to append record to anchor: " + e.toString());
-            }
+//            try {
+//                String anchorId = parser.getAchorID(recordElement);
+//                if (anchorId != null) {
+//                    Fileformat aff = retrieveFileformat("", anchorId, catalogue, inPrefs);
+//                    attachToAnchor(ff.getDigitalDocument(), aff);
+//                }
+//            } catch (Exception e) {
+//                logger.warn("Unable to append record to anchor: " + e.toString());
+//            }
             createAtstsl(ff.getDigitalDocument());
             return ff;
         } catch (SRUClientException | UGHException | ParserException e) {
@@ -420,7 +437,12 @@ public class KalliopeOpacImport implements IOpacPlugin {
     public ConfigOpacDoctype getOpacDocType() {
         try {
             ConfigOpac co = ConfigOpac.getInstance();
-            ConfigOpacDoctype cod = co.getDoctypeByMapping(this.gattung.substring(0, 2), this.coc.getTitle());
+            ConfigOpacDoctype cod = null;
+            if(StringUtils.isNotBlank(this.docStructType)) {
+                cod = co.getDoctypeByName(this.docStructType.toLowerCase());
+            } else {
+                cod = co.getDoctypeByMapping(this.gattung.substring(0, 2), this.coc.getTitle());               
+            }
             if (cod == null) {
 
                 cod = ConfigOpac.getInstance().getAllDoctypes().get(0);
