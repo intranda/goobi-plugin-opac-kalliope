@@ -4,4 +4,36 @@
     <mapping>/opt/digiverso/goobi/xslt/mods_map_kalliope.xml</mapping>
     <defaultDocType>Monograph</defaultDocType>
     <defaultPicaType>Aa</defaultPicaType>
+    <docTypes>
+    	<docType>
+	    	<name>SingleLetter</name>
+	    	<condition>
+	    		<xpath>
+	    			mods:typeOfResource
+	    		</xpath>
+	    		<value>
+	    			text
+	    		</value>
+	    	</condition>
+	    	<condition>
+	    		<xpath>
+	    			mods:genre
+	    		</xpath>
+	    		<value>
+	    			Brief
+	    		</value>
+	    	</condition>
+    	</docType>
+    	<docType>
+	    	<name>Manuscript</name>
+	    	<condition>
+	    		<xpath>
+	    			mods:typeOfResource
+	    		</xpath>
+	    		<value>
+	    			text
+	    		</value>
+	    	</condition>
+    	</docType>
+    </docTypes>
 </config_plugin>

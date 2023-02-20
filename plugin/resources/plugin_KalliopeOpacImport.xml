@@ -4,4 +4,24 @@
     <mapping>/opt/digiverso/git/goobi-plugin-opac-kalliope/plugin/resources/mods_map_kalliope.xml</mapping>
     <defaultDocType>ArchiveDocument</defaultDocType>
     <defaultPicaType>Ag</defaultPicaType>
+    <docTypes>
+    	<docType>
+	    	<name>SingleLetter</name>
+	    	<condition>
+	    		<xpath>mods:typeOfResource</xpath>
+	    		<value>text</value>
+	    	</condition>
+	    	<condition>
+	    		<xpath>mods:genre</xpath>
+	    		<value>Brief</value>
+	    	</condition>
+    	</docType>
+    	<docType>
+	    	<name>Manuscript</name>
+	    	<condition>
+	    		<xpath>mods:typeOfResource</xpath>
+	    		<value>text</value>
+	    	</condition>
+    	</docType>
+    </docTypes>
 </config_plugin>

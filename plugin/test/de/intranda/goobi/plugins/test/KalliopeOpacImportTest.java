@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -14,12 +14,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ugh.dl.Fileformat;
-import ugh.dl.Prefs;
 import de.intranda.goobi.plugins.KalliopeOpacImport;
-import de.intranda.utils.DocumentUtils;
 import de.sub.goobi.helper.exceptions.ImportPluginException;
 import de.unigoettingen.sub.search.opac.ConfigOpacCatalogue;
+import ugh.dl.Fileformat;
+import ugh.dl.Prefs;
 
 public class KalliopeOpacImportTest {
 
@@ -31,8 +30,8 @@ public class KalliopeOpacImportTest {
     private ConfigOpacCatalogue catalogue;
     private Prefs prefs;
     private Prefs prefsRostock;
-    private Configuration config;
-    private Configuration configRostock;
+    private HierarchicalConfiguration config;
+    private HierarchicalConfiguration configRostock;
 
     
     @BeforeClass

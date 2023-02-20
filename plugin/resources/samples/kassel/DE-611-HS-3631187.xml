@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/" xmlns:srw_dc="info:srw/schema/1/dc-v1.1" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:diag="http://www.loc.gov/zing/srw/diagnostic/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:cld="http://www.ukoln.ac.uk/metadata/rslp/schema/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:my="http://www.infolytics.com/kopac" xmlns:eacNS="urn:isbn:1-931666-33-4">
+   <srw:version>1.2</srw:version>
+   <srw:numberOfRecords>1</srw:numberOfRecords>
+   <srw:records>
+      <srw:record>
+         <srw:recordSchema>info:srw/schema/1/mods-v3.7</srw:recordSchema>
+         <srw:recordPacking>xml</srw:recordPacking>
+         <srw:recordData>
+            <mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" xsi:schemaLocation="http://www.loc.gov/mods/v3 https://www.loc.gov/standards/mods/v3/mods-3-7.xsd">
+               <identifier type="uri">https://kalliope-verbund.info/DE-611-HS-3631187</identifier>
+               <recordInfo>
+                  <recordIdentifier source="DE-611">DE-611-HS-3631187</recordIdentifier>
+                  <recordCreationDate encoding="iso8601">20200908</recordCreationDate>
+                  <recordChangeDate encoding="iso8601">20211209</recordChangeDate>
+                  <recordChangeDate encoding="w3cdtf">2023-02-03T21:17:36+01:00</recordChangeDate>
+                  <recordContentSource authority="German ISIL- and Library Codes Agency" authorityURI="http://ld.zdb-services.de/resource/organisations/" valueURI="http://ld.zdb-services.de/resource/organisations/DE-34-30">Universitätsbibliothek Kassel, Landesbibliothek und Murhardsche Bibliothek</recordContentSource>
+               </recordInfo>
+               <relatedItem type="host">
+                  <recordInfo>
+                     <recordIdentifier source="DE-611">DE-611-BF-79569</recordIdentifier>
+                  </recordInfo>
+                  <identifier type="uri">https://kalliope-verbund.info/DE-611-BF-79569</identifier>
+                  <titleInfo>
+                     <title>Briefe an Franz Rosenzweig</title>
+                  </titleInfo>
+               </relatedItem>
+               <relatedItem type="series">
+                  <recordInfo>
+                     <recordIdentifier source="DE-611">DE-611-BF-71269</recordIdentifier>
+                  </recordInfo>
+                  <identifier type="uri">https://kalliope-verbund.info/DE-611-BF-71269</identifier>
+                  <titleInfo>
+                     <title>Teilnachlass Franz Rosenzweig</title>
+                  </titleInfo>
+               </relatedItem>
+               <typeOfResource collection="yes">text</typeOfResource>
+               <name type="personal" authority="DE-588" authorityURI="https://d-nb.info/gnd/" valueURI="https://d-nb.info/gnd/116626682">
+                  <namePart>Rosenzweig, Adele (1867-1933)</namePart>
+                  <role>
+                     <roleTerm authority="MARC Code List for Relators Scheme" authorityURI="http://id.loc.gov/vocabulary/relators/" type="code" lang="eng" valueURI="http://id.loc.gov/vocabulary/relators/cre">cre</roleTerm>
+                     <roleTerm type="text" lang="ger">Verfasser</roleTerm>
+                  </role>
+               </name>
+               <name type="personal" authority="DE-588" authorityURI="https://d-nb.info/gnd/" valueURI="https://d-nb.info/gnd/1216949603">
+                  <namePart>Oppenheim, Gertrud (1885-1976)</namePart>
+                  <role>
+                     <roleTerm type="text" lang="ger">Schreiber</roleTerm>
+                  </role>
+               </name>
+               <genre lang="ger" authorityURI="https://d-nb.info/gnd/" valueURI="https://d-nb.info/gnd/4128022-2" authority="DE-588">Bericht</genre>
+               <genre lang="ger" authorityURI="https://d-nb.info/gnd/" valueURI="https://d-nb.info/gnd/4058900-6" authority="DE-588">Tagebuch</genre>
+               <genre lang="ger" authorityURI="https://d-nb.info/gnd/" valueURI="https://d-nb.info/gnd/4279136-4" authority="DE-588">Abschrift</genre>
+               <titleInfo>
+                  <title>Erinnerungen (Ansetzungssachtitel von Bearbeiter/in)</title>
+               </titleInfo>
+               <originInfo>
+                  <dateCreated encoding="w3cdtf" keyDate="yes" point="start">1922-01-09</dateCreated>
+                  <dateCreated encoding="w3cdtf" point="end">1922-08-07</dateCreated>
+                  <dateCreated>09.01.1922-07.08.1922</dateCreated>
+                  <place>
+                     <placeTerm type="text">Kassel [vermutlich]</placeTerm>
+                  </place>
+               </originInfo>
+               <language>
+                  <languageTerm authority="iso639-2b" authorityURI="http://id.loc.gov/vocabulary/iso639-2/" valueURI="http://id.loc.gov/vocabulary/iso639-2/ger" type="code">ger</languageTerm>
+                  <languageTerm type="text" lang="ger">Deutsch</languageTerm>
+               </language>
+               <location>
+                  <shelfLocator>2° Ms. philos. 39[A024,01</shelfLocator>
+                  <physicalLocation authority="German ISIL- and Library Codes Agency" authorityURI="http://ld.zdb-services.de/resource/organisations/" valueURI="http://ld.zdb-services.de/resource/organisations/DE-34-30">Universitätsbibliothek Kassel, Landesbibliothek und Murhardsche Bibliothek</physicalLocation>
+               </location>
+               <physicalDescription>
+                  <extent>Bericht von Adele Rosenzweig in Tagebuchform, eh. abgeschrieben von Gertrud Oppenheim, o.U., Korrekturen, 53 Bl., Text stimmt weitgehend überein mit 2° Ms. philos. 39[A024,02</extent>
+               </physicalDescription>
+               <note type="systemDetails">Handschrift</note>
+            </mods>
+         </srw:recordData>
+      </srw:record>
+   </srw:records>
+</srw:searchRetrieveResponse>

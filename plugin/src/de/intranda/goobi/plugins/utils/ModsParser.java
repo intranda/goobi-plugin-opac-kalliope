@@ -5,7 +5,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
@@ -20,12 +24,10 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 import org.joda.time.format.DateTimeParser;
-import org.joda.time.format.ISODateTimeFormat;
 
 import de.intranda.utils.SimpleMatrix;
 import de.intranda.utils.SimpleMatrix.MatrixFiller;
@@ -707,6 +709,32 @@ public class ModsParser {
     }
     
 
+    public static String determineDocType(Element recordElement, LinkedHashMap<String, Map<String, String>> docTypeMappings, String defaultType) {
+        for (Entry<String, Map<String, String>> entry : docTypeMappings.entrySet()) {
+            String docTypeName = entry.getKey();
+            Map<String, String> conditions = entry.getValue();
+            boolean match = true;
+            for (Entry<String, String> condition : conditions.entrySet()) {
+                String xpath = condition.getKey();
+                String value = condition.getValue();
+                List<Element> list = findElement(xpath, recordElement);
+                if(list.isEmpty()) {
+                    match = StringUtils.isBlank(value);
+                } else {
+                    match = list.stream().anyMatch(ele  -> Objects.equals(value, ele.getText()));
+                }
+                if(!match) {
+                    break;  //leave the loop if no match. In this case mapping doesn't apply and we don't need to check the other conditions
+                }
+            }
+            if(match) {
+                return docTypeName;
+            }
+        }
+        return defaultType;
+    }
+    
+
     private void setDatePatterns(Element eleMetadata) {
         datePattern = eleMetadata.getAttributeValue("datePattern");
         dateInputPattern = eleMetadata.getAttributeValue("dateInputPattern");
@@ -740,5 +768,6 @@ public class ModsParser {
         }
 
     }
+
 
 }

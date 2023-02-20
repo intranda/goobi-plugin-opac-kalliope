@@ -27,12 +27,15 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.SortedMap;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -77,7 +80,7 @@ public class KalliopeOpacImport implements IOpacPlugin {
     private static final String PLUGIN_VERSION = "v1.1";
     private static final String PLUGIN_BUILDDATE = "20141127";
 
-    private Configuration config;
+    private HierarchicalConfiguration config;
     private String inputEncoding;
     private File mappingFile;
     private String defaultDocType;
@@ -94,7 +97,7 @@ public class KalliopeOpacImport implements IOpacPlugin {
         init();
     }
 
-    public KalliopeOpacImport(Configuration config) throws ImportPluginException {
+    public KalliopeOpacImport(HierarchicalConfiguration config) throws ImportPluginException {
         this.config = config;
         init();
     }
@@ -160,8 +163,9 @@ public class KalliopeOpacImport implements IOpacPlugin {
 
             Element recordElement = records.get(0);
             ModsParser parser = new ModsParser(inPrefs, mappingFile, config, anchorMetadataList);
-            Element typeOfResourceElement = parser.getTypeOfResource(recordElement);
-            ff = createEmptyFileformat(inPrefs, typeOfResourceElement);
+            LinkedHashMap<String, Map<String, String>> docTypeMappings = createDocTypeMapping(config);
+            String docType = parser.determineDocType(recordElement, docTypeMappings, config.getString("defaultDocType", "Monograph"));
+            ff = createEmptyFileformat(inPrefs, docType);
             DocStruct topStruct = getMainStruct(ff);
             DocStruct anchor = getAnchorStruct(ff);
             DocStruct boundBook = ff.getDigitalDocument().getPhysicalDocStruct();
@@ -199,6 +203,27 @@ public class KalliopeOpacImport implements IOpacPlugin {
             logger.error(e);
             throw new ImportPluginException("Failed to create fileformat: " + e.getMessage());
         }
+    }
+
+    public static LinkedHashMap<String, Map<String, String>> createDocTypeMapping(HierarchicalConfiguration conf) {
+        LinkedHashMap<String, Map<String, String>> mappings = new LinkedHashMap<>();
+        List<HierarchicalConfiguration> docTypeConfigs = conf.configurationsAt("docTypes.docType");
+        for (HierarchicalConfiguration docTypeConf : docTypeConfigs) {
+            String docTypeName = docTypeConf.getString("name", "");
+            if(StringUtils.isNotBlank(docTypeName)) {
+                Map<String, String> mappingConditions = new HashMap<>();
+                List<HierarchicalConfiguration> conditions = docTypeConf.configurationsAt("condition");
+                for (HierarchicalConfiguration condition : conditions) {
+                    String xpath = condition.getString("xpath", "");
+                    if(StringUtils.isNotBlank(xpath)) {
+                        String value = condition.getString("value", "");
+                        mappingConditions.put(xpath, value);
+                    }
+                }
+                mappings.put(docTypeName, mappingConditions);
+            }
+        }
+        return mappings;
     }
 
     /**
@@ -246,13 +271,13 @@ public class KalliopeOpacImport implements IOpacPlugin {
      * @return
      * @throws PreferencesException
      */
-    private Fileformat createEmptyFileformat(Prefs inPrefs, Element typeOfResourceElement) throws PreferencesException {
+    private Fileformat createEmptyFileformat(Prefs inPrefs, String docTypeName) throws PreferencesException {
 
         //create base structures
         Fileformat ff = new MetsMods(inPrefs);
         DigitalDocument dd = new DigitalDocument();
         ff.setDigitalDocument(dd);
-        String dsName = defaultDocType;
+        String dsName = StringUtils.isBlank(docTypeName) ? defaultDocType : docTypeName;
         //        String anchorName = null;
         String boundBookName = "BoundBook";
 
