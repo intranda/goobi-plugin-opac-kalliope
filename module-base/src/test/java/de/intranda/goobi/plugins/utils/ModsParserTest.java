@@ -62,9 +62,9 @@ public class ModsParserTest {
     
     @Test
     public void testDetermineDocType() throws JDOMException, IOException, ConfigurationException {
-        Path testConfig = Paths.get("resources/plugin_KalliopeOpacImport.xml");
-        Path sampleManuscript = Paths.get("resources/samples/kassel/DE-611-HS-3631187.xml");
-        Path sampleLetter = Paths.get("resources/samples/kassel/DE-611-HS-3660553.xml");
+        Path testConfig = Paths.get("src/test/resources/plugin_KalliopeOpacImport.xml");
+        Path sampleManuscript = Paths.get("src/test/resources/samples/kassel/DE-611-HS-3631187.xml");
+        Path sampleLetter = Paths.get("src/test/resources/samples/kassel/DE-611-HS-3660553.xml");
         
         Document docLetter = DocumentUtils.getDocumentFromFile(sampleLetter.toFile());
         Element eleLetter = getMods(docLetter).get(0);
