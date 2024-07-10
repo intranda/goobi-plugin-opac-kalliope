@@ -1,0 +1,622 @@
+<?xml version="1.0"?>
+<map>
+    <metadata logical="true">
+        <name>CatalogIDDigital</name>
+        <xpath>/mods:mods/mods:recordInfo/mods:recordIdentifier</xpath>
+    </metadata>
+  <!-- test -->
+    <metadata logical="true">
+        <name>CatalogIDKalliope</name>
+        <xpath>/mods:mods/mods:recordInfo/mods:recordIdentifier</xpath>
+    </metadata>
+    <metadata physical="true" logical="true">
+        <name>shelfmarksource</name>
+        <xpath>/mods:mods/mods:location/mods:shelfLocator</xpath>
+    </metadata>
+    <metadata physical="true" logical="true">
+        <name>PhysicalLocation</name>
+        <xpath>/mods:mods/mods:location/mods:physicalLocation</xpath>
+    </metadata>
+    <metadata logical="true" separator=" ">
+        <name>TitleDocMain</name>
+        <xpath>/mods:mods/mods:titleInfo[not(@type)]/mods:nonSort
+        </xpath>
+        <xpath>/mods:mods/mods:titleInfo[not(@type)]/mods:title
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>TitleDocUniform</name>
+        <xpath>/mods:mods/mods:titleInfo[@type='uniform']/mods:title
+        </xpath>
+        <xpath>/mods:mods/mods:titleInfo[@type='uniform']/mods:partName
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>TitleDocAbbreviated</name>
+        <xpath>/mods:mods/mods:titleInfo[@type='abbreviated']/mods:title
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>TitleDocSub1</name>
+        <xpath>/mods:mods/mods:titleInfo/mods:subTitle</xpath>
+        <xpath>/mods:mods/mods:titleInfo[not(@type='uniform')]/mods:partName
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>TitleDocParallel</name>
+        <xpath>/mods:mods/mods:titleInfo[@type='alternative']/mods:title
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>ISBN</name>
+        <xpath>/mods:mods/mods:identifier[@type='ISBN' or @type='isbn']
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>ISSN</name>
+        <xpath>/mods:mods/mods:identifier[@type='ISSN' or @type='issn']
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>LCCN</name>
+        <xpath>/mods:mods/mods:identifier[@type='LCCN' or @type='lccn']
+        </xpath>
+    </metadata>
+    <metadata physical="true">
+        <name>location</name>
+        <xpath>/mods:mods/mods:location</xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>SizeSourcePrint</name>
+        <xpath>/mods:mods/mods:physicalDescription/mods:extent</xpath>
+    </metadata>
+    <metadata logical="true" physical="false">
+        <name>NotePhysical</name>
+        <xpath>/mods:mods/mods:physicalDescription/mods:note</xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>OtherPhysicalForm</name>
+        <xpath>/mods:mods/mods:note[@type='additional physical form']
+        </xpath>
+    </metadata>
+    <metadata logical="true" mergeXPathInstances="true" separator=", " ignoreRegex=",.*">
+        <name>DocLanguage</name>
+        <xpath>/mods:mods/mods:language/mods:languageTerm[@type='code'][@authority='iso639-2b']
+        </xpath>
+        <!--The following mappings are actually about the languages of the record, not the document -->
+		<!--<xpath>/mods:mods/mods:originInfo/mods:languageOfCataloging/mods:languageTerm[@type='code'][@authority='iso639-2b']
+        </xpath>
+        <xpath>/mods:mods/mods:recordInfo/mods:languageOfCataloging/mods:languageTerm[@type='code'][@authority='iso639-2b']
+        </xpath>-->
+    </metadata>
+    <metadata logical="true" mergeXPaths="false" mergeXPathInstances="true" separator="-" datePattern="yyyy" ignoreRegex="(\[.+?\])|([-/].*)">
+        <name>PublicationYear</name>
+	<!--	<xpath>/mods:mods/mods:originInfo/mods:dateCreated[@encoding='w3cdtf'][@keyDate='yes']</xpath> auskommentiert im Juli 2024-->
+        <xpath>/mods:mods/mods:originInfo/mods:dateIssued[@encoding='w3cdtf'][@keyDate='yes']</xpath>
+	</metadata>
+  
+    <metadata logical="true" mergeXPaths="false" mergeXPathInstances="true" separator="-" ignoreRegex="(\[.+?\])|([-/].*)">
+	<!--  <metadata logical="true" mergeXPaths="false" mergeXPathInstances="true" separator="-" datePattern="yyyy" ignoreRegex="(\[.+?\])|([-/].*)"> -->
+        <name>PublicationYearDisplay</name>
+    	 <xpath>/mods:mods/mods:originInfo/mods:dateCreated[not(@encoding)]</xpath> 
+        <!-- <xpath>/mods:mods/mods:originInfo/mods:dateIssued[not(@encoding)]</xpath> -->
+    </metadata>
+   <!-- auskommentiert im Juli 2024
+ 	 <metadata logical="true" mergeXPaths="false" mergeXPathInstances="true" separator="-" datePattern="dd.MM.yyyy">
+        <name>Date</name>
+        <xpath>/mods:mods/mods:originInfo/mods:dateCreated
+        </xpath>
+        <xpath>/mods:mods/mods:originInfo/mods:dateIssued</xpath>
+    </metadata>
+	--> 
+  <!-- neu im Juli 2024 -->
+   <metadata logical="true" mergeXPaths="false" mergeXPathInstances="true" separator="-">
+   <!-- <metadata logical="true" mergeXPaths="false" mergeXPathInstances="true" separator="-" datePattern="dd.MM.yyyy" ignoreRegex="(\[.+?\])|([-/].*)"> -->
+    <!-- mergeXPaths="false" mergeXPathInstances="true" separator="-" datePattern="yyyy" ignoreRegex="(\[.+?\])|([-/].*)"> -->
+        <name>DateOfOrigin</name>
+		<!-- <xpath>/mods:mods/mods:originInfo/mods:dateCreated</xpath> -->
+     	<xpath>/mods:mods/mods:originInfo/mods:dateCreated[@encoding='w3cdtf'][@keyDate='yes']</xpath>
+		<!-- <xpath>/mods:mods/mods:originInfo[@eventType='production']/mods:dateCreated</xpath> -->
+        <!-- <xpath>/mods:mods/mods:originInfo/mods:dateIssued[@encoding='w3cdtf'][@keyDate='yes']</xpath> -->
+    </metadata>
+  <!-- -->
+    <metadata logical="true">
+        <name>DateOfPublicationStart</name>
+        <xpath>/mods:mods/mods:originInfo/mods:dateIssued[@point='start'][@encoding='w3cdtf']
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>DateOfPublicationEnd</name>
+        <xpath>/mods:mods/mods:originInfo/mods:dateIssued[@point='end'][@encoding='w3cdtf']
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>PublicationRun</name>
+        <xpath>/mods:mods/mods:originInfo/mods:issuance
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>PublicationRun</name>
+        <xpath>/mods:mods/mods:originInfo/mods:frequency
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>PublisherName</name>
+        <xpath>/mods:mods/mods:originInfo[not(@displayLabel)]/mods:publisher
+        <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='isb'[@type='code']]/mods:namepart</xpath>
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>Edition</name>
+        <xpath>/mods:mods/mods:originInfo/mods:edition</xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>PlaceOfPublication</name>
+        <xpath>/mods:mods/mods:originInfo[not(@displayLabel)]/mods:place/mods:placeTerm[@type='text']
+        </xpath>
+        <xpath>/mods:mods/mods:originInfo[not(@displayLabel)]/mods:place</xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>DateOfManufacture</name>
+        <xpath>/mods:mods/mods:originInfo[@displayLabel='manufacturer']/mods:dateOther[@type='manufacture']
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>PlaceOfManufacture</name>
+        <xpath>/mods:mods/mods:originInfo[@displayLabel='manufacturer']/mods:place/mods:placeTerm[@type='text']
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>Material</name>
+        <xpath>/mods:mods/mods:physicalDescription/mods:form[@type='material']
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>AccessOptions</name>
+        <xpath>/mods:mods/mods:accessOptions
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>AccessLicense</name>
+        <xpath>/mods:mods/mods:accessCondition
+        </xpath>
+    </metadata>
+    <metadata logical="true" ignoreRegex="[\[\(](.+?)[\]\)]">
+        <name>Person</name>
+        <xpath>/mods:mods/mods:name[@type='personal']
+        </xpath>
+        <roleMapping>
+            <person>
+                <name>Collector</name>
+                <roleTerm>col</roleTerm>
+                <roleTerm>collector</roleTerm>
+            </person>
+            <person>
+                <name>Compiler</name>
+                <roleTerm>com</roleTerm>
+                <roleTerm>recopilador</roleTerm>
+                <roleTerm>comp</roleTerm>
+                <roleTerm>rec</roleTerm>
+                <roleTerm>compiler</roleTerm>
+                <roleTerm>compilador</roleTerm>
+            </person>
+            <person>
+                <name>Arranger</name>
+                <roleTerm>arreglista musical</roleTerm>
+                <roleTerm>arr</roleTerm>
+                <roleTerm>arreglista</roleTerm>
+                <roleTerm>arranger</roleTerm>
+            </person>
+            <person>
+                <name>Photographer</name>
+                <roleTerm>fotógrafo</roleTerm>
+                <roleTerm>fot</roleTerm>
+                <roleTerm>pht</roleTerm>
+                <roleTerm>photographer</roleTerm>
+                <roleTerm>Fotograph</roleTerm>
+            </person>
+            <person>
+                <name>Binder</name>
+                <roleTerm>encuadernador</roleTerm>
+                <roleTerm>encuadernación</roleTerm>
+                <roleTerm>bnd</roleTerm>
+                <roleTerm>encuadernado</roleTerm>
+                <roleTerm>binder</roleTerm>
+                <roleTerm>enc</roleTerm>
+            </person>
+            <person>
+                <name>Copier</name>
+                <roleTerm>cop</roleTerm>
+                <roleTerm>copista</roleTerm>
+                <roleTerm>copier</roleTerm>
+                <roleTerm>frg</roleTerm>
+            </person>
+            <person>
+                <name>Printer</name>
+                <roleTerm>imp</roleTerm>
+                <roleTerm>impresor</roleTerm>
+                <roleTerm>prt</roleTerm>
+                <roleTerm>printer</roleTerm>
+            </person>
+            <person>
+                <name>Coordinator</name>
+                <roleTerm>seleccionador</roleTerm>
+                <roleTerm>coord</roleTerm>
+                <roleTerm>coordinator</roleTerm>
+                <roleTerm>coordinador</roleTerm>
+                <roleTerm>sel</roleTerm>
+            </person>
+            <person>
+                <name>Annotator</name>
+                <roleTerm>anot</roleTerm>
+                <roleTerm>ann</roleTerm>
+                <roleTerm>annotator</roleTerm>
+                <roleTerm>cwt</roleTerm>
+            </person>
+            <person>
+                <name>Continuator</name>
+                <roleTerm>continuador</roleTerm>
+                <roleTerm>cont</roleTerm>
+            </person>
+            <person>
+                <name>Collaborator</name>
+                <roleTerm>colaborador</roleTerm>
+                <roleTerm>collaborator</roleTerm>
+            </person>
+            <person>
+                <name>Author</name>
+                <roleTerm>aut</roleTerm>
+                <roleTerm>autor</roleTerm>
+                <roleTerm>author</roleTerm>
+               <!-- <roleTerm>creator</roleTerm>
+                <roleTerm>cre</roleTerm> -->
+              <!--  <roleTerm>Verfasser</roleTerm> -->
+              <roleTerm>Urheber</roleTerm> 
+              <!-- neu im Juli 2024 -->
+               <roleTerm>Autor</roleTerm>              
+            </person>
+          <!--neu im Juli 2024 --> 
+           <person>
+                <name>Creator</name>
+               <!-- <roleTerm>aut</roleTerm>
+                <roleTerm>autor</roleTerm>
+                <roleTerm>author</roleTerm> -->
+                <roleTerm>creator</roleTerm>
+                <roleTerm>cre</roleTerm>
+                <roleTerm>Verfasser</roleTerm>
+              <!--  <roleTerm>Urheber</roleTerm> -->
+            </person>
+            <person>
+                <name>Composer</name>
+                <roleTerm>composer</roleTerm>
+                <roleTerm>cmp</roleTerm>
+                <roleTerm>Komponist</roleTerm>
+            </person>
+            <person>
+                <name>Librettist</name>
+                <roleTerm>Librettist</roleTerm>
+                <roleTerm>lbt</roleTerm>
+            </person>
+            <person>
+                <name>Commentator</name>
+                <roleTerm>comentarista</roleTerm>
+                <roleTerm>commentator</roleTerm>
+                <roleTerm>cmm</roleTerm>
+            </person>
+            <person>
+                <name>AuthorLit</name>
+                <roleTerm>autor literario</roleTerm>
+                <roleTerm>aut lit</roleTerm>
+            </person>
+            <person>
+                <name>Transcriber</name>
+                <roleTerm>transcriber</roleTerm>
+                <roleTerm>transcrip</roleTerm>
+                <roleTerm>trc</roleTerm>
+                <roleTerm>transcriptor</roleTerm>
+            </person>
+            <person>
+                <name>Translator</name>
+                <roleTerm>trad</roleTerm>
+                <roleTerm>trl</roleTerm>
+                <roleTerm>traductor</roleTerm>
+                <roleTerm>translator</roleTerm>
+                <roleTerm>Übersetzer</roleTerm>
+            </person>
+            <person>
+                <name>Actor</name>
+                <roleTerm>int</roleTerm>
+                <roleTerm>interprete</roleTerm>
+                <roleTerm>interpreter</roleTerm>
+            </person>
+            <person>
+                <name>IllustratorArtist</name>
+                <roleTerm>illu</roleTerm>
+                <roleTerm>dib</roleTerm>
+                <roleTerm>illustrador</roleTerm>
+                <roleTerm>dibujante</roleTerm>
+                <roleTerm>Illustrator</roleTerm>
+            </person>
+            <person>
+                <name>Director</name>
+                <roleTerm>director</roleTerm>
+                <roleTerm>dir</roleTerm>
+                <roleTerm>drt</roleTerm>
+            </person>
+            <person>
+                <name>Editor</name>
+                <roleTerm>editor</roleTerm>
+                <roleTerm>ed</roleTerm>
+                <roleTerm>edt</roleTerm>
+                <roleTerm>Bearbeiter</roleTerm>
+                <roleTerm>Redakteur</roleTerm>
+            </person>
+            <person>
+                <name>Teacher</name>
+                <roleTerm>teacher</roleTerm>
+                <roleTerm>tch</roleTerm>
+            </person>
+            <person>
+                <name>Adapter</name>
+                <roleTerm>adp</roleTerm>
+                <roleTerm>adapt</roleTerm>
+                <roleTerm>adaptor</roleTerm>
+                <roleTerm>refundidor</roleTerm>
+                <roleTerm>adapter</roleTerm>
+                <roleTerm>ref</roleTerm>
+            </person>
+            <person>
+                <name>Revisor</name>
+                <roleTerm>rev</roleTerm>
+                <roleTerm>revisor</roleTerm>
+            </person>
+            <person>
+                <name>Corrector</name>
+                <roleTerm>corr</roleTerm>
+                <roleTerm>corrector</roleTerm>
+                <roleTerm>crr</roleTerm>
+            </person>
+            <person>
+                <name>IntroductionAuthor</name>
+                <roleTerm>prologuista</roleTerm>
+                <roleTerm>author of introduction, etc</roleTerm>
+                <roleTerm>aui</roleTerm>
+                <roleTerm>pr</roleTerm>
+            </person>
+            <person>
+                <name>Redactor</name>
+                <roleTerm>redactor</roleTerm>
+                <roleTerm>red</roleTerm>
+            </person>
+                        <person>
+                <name>Addressee</name>
+                <roleTerm>addressee</roleTerm>
+                <roleTerm>rcp</roleTerm>
+                <roleTerm>Adressat</roleTerm>
+            </person>
+                        <person>
+                <name>Corresondent</name>
+                <roleTerm>correspondent</roleTerm>
+                <roleTerm>crp</roleTerm>
+            </person>
+                        <person>
+                <name>Signer</name>
+                <roleTerm>signer</roleTerm>
+                <roleTerm>sgn</roleTerm>
+                <roleTerm>Unterzeichner</roleTerm>
+            </person>
+                        <person>
+                <name>OtherPerson</name>
+                <roleTerm>other</roleTerm>
+                <roleTerm>oth</roleTerm>
+                <roleTerm>Sonstige</roleTerm>
+            </person>
+            <person>
+                <name>AuthorPrePostface</name>
+                <roleTerm>aft</roleTerm>
+                <roleTerm>aui</roleTerm>
+                <roleTerm>wpr</roleTerm>
+            </person>
+            <person>
+                <name>Honoree</name>
+                <roleTerm>Gefeierte Person</roleTerm>
+                <roleTerm>hnr</roleTerm>
+            </person>
+            <person>
+                <name>Dedicatee</name>
+                <roleTerm>dte</roleTerm>
+                <roleTerm>Widmungsempfänger</roleTerm>
+            </person>
+            <person>
+                <name>Interviewer</name>
+                <roleTerm>ivr</roleTerm>
+                <roleTerm>inv</roleTerm>
+                <roleTerm>Interviewer</roleTerm>
+            </person>
+            <person>
+                <name>Interviewee</name>
+                <roleTerm>ive</roleTerm>
+                <roleTerm>Interviewter</roleTerm>
+            </person>
+        </roleMapping>
+    </metadata>
+    <metadata logical="true" mergeXPathInstances="false" margeXPaths="false" ignoreRegex="[\[](.+?)[\]]">
+        <name>Author_corporate</name>
+        <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='creator']</xpath>
+        <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='author']</xpath>
+    </metadata>
+        <metadata logical="true" mergeXPathInstances="false" mergeXPaths="false" ignoreRegex="[\[](.+?)[\]]">
+        <name>Addressee_corporate</name>
+        <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='addressee']</xpath>
+    </metadata>
+        <metadata logical="true" mergeXPathInstances="false" mergeXPaths="false">
+        <name>Correspondent_corporate</name>
+        <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='correspondent']</xpath>
+    </metadata>
+    <metadata logical="true" mergeXPathInstances="false" mergeXPaths="false">
+        <name>OtherCorporate</name>
+        <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='other']</xpath>
+        <xpath>/mods:mods/mods:name[@type='corporate'][mods:role/mods:roleTerm='otherroles']</xpath>
+    </metadata>
+   <metadata logical="true" mergeXPathInstances="true" mergeXPaths="true" separator="; ">
+        <name>CreatorsAllOrigin</name>
+        <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='author']</xpath>
+        <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='creator']</xpath>
+        <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='correspondent']</xpath>
+        <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='addressee']</xpath>
+        <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='other']</xpath>
+        <xpath>/mods:mods/mods:name[mods:role/mods:roleTerm='otherroles']</xpath>
+    </metadata>
+        <metadata logical="true" mergeXPathInstances="false" mergeXPaths="false">
+        <name>SubjectCorporate</name>
+        <xpath>/mods:mods/mods:subject/mods:name[@type='corporate']</xpath>
+    </metadata>
+    <metadata logical="true" mergeXPathInstances="false" mergeXPaths="false">
+        <name>SubjectPerson</name>
+        <xpath>/mods:mods/mods:subject/mods:name[@type='personal']</xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>Manufacturer</name>
+        <xpath>/mods:mods/mods:originInfo[@displayLabel='manufacturer']/mods:publisher
+        </xpath>
+    </metadata>
+    <metadata logical="true" separator="::">
+        <name>Taxonomy</name>
+        <xpath>/mods:mods/mods:subject/mods:titleInfo/mods:title</xpath>
+        <xpath>/mods:mods/mods:subject</xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>Classification</name>
+        <xpath>/mods:mods/mods:classification</xpath>
+    </metadata>
+  <!-- eingefügt 2024-07-01 -->
+   <metadata logical="true">
+        <name>SubjectTopic</name>
+     		<xpath>/mods:mods/mods:subject/mods:topic</xpath>
+    <!--    <xpath>/mods:mods/mods:subject/#mods:topic</xpath> -->
+    </metadata>	
+    <metadata logical="true">
+        <name>GenreType</name>
+        <xpath>/mods:mods/mods:genre</xpath>
+    </metadata>
+<!--    <metadata physical="true">
+        <name>datedigit</name>
+        <xpath>/mods:mods/mods:recordInfo/mods:recordCreationDate
+        </xpath>
+    </metadata> -->
+    <metadata logical="true">
+        <name>AdditionalInformation</name>
+        <xpath>/mods:mods/mods:note[not(@type)]</xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>NotePublication</name>
+        <xpath>/mods:mods/mods:note[@type='publications']</xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>BibliographicalNote</name>
+        <xpath>/mods:mods/mods:note[@type='bibliography']</xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>StatementOfResponsibility</name>
+        <xpath>/mods:mods/mods:note[@type='statement of responsibility']
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>Conference</name>
+        <xpath> /mods:mods/mods:name[@type='conference']</xpath>
+        <xpath>/mods:mods/mods:name[@type='conference']/mods:role/mods:roleTerm
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>relatedSeries</name>
+        <xpath>/mods:mods/mods:relatedItem[@type='series']/mods:titleInfo/mods:title
+        </xpath>
+        <!-- <xpath>/mods:mods/mods:relatedItem[@type='series']/mods:titleInfo[@type='uniform']/mods:title</xpath> -->
+    </metadata>
+    <metadata logical="true">
+        <name>PrecedingVolume</name>
+        <xpath>/mods:mods/mods:relatedItem[@type='preceding']/mods:titleInfo/mods:title
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>SucceedingVolume</name>
+        <xpath>/mods:mods/mods:relatedItem[@type='succeeding']/mods:titleInfo/mods:title
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>CatalogIDPredecessorPeriodical</name>
+        <xpath>/mods:mods/mods:relatedItem[@type='preceding']/mods:identifier
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>CatalogIDSuccessorPeriodical</name>
+        <xpath>/mods:mods/mods:relatedItem[@type='succeeding']/mods:identifier
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>CurrentNo</name>
+        <xpath>/mods:mods/mods:relatedItem[@type='series']/mods:titleInfo/mods:partNumber
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>CurrentNoSorting</name>
+        <xpath>/mods:mods/mods:relatedItem[@type='series']/mods:titleInfo/mods:partNumber
+        </xpath>
+    </metadata>
+    <!-- <metadata logical="true"> <name>singleDigCollection</name> <xpath>/mods:mods/mods:location/mods:holdingSimple/mods:copyInformation/mods:subLocation</xpath> 
+        </metadata> -->
+    <metadata logical="true">
+        <name>CountryCode</name>
+        <xpath>/mods:mods/mods:originInfo/mods:place/mods:placeTerm[@type='code']
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>recordContentSource</name>
+        <xpath>/mods:mods/mods:recordInfo/mods:recordContentSource
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>TableOfContent</name>
+        <xpath>/mods:mods/mods:tableOfContents</xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>Abstract</name>
+        <xpath>/mods:mods/mods:abstract</xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>TargetAudience</name>
+        <xpath>/mods:mods/mods:targetAudience</xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>Reference</name>
+        <xpath>/mods:mods/mods:relatedItem[@type='isReferencedBy']/mods:name
+        </xpath>
+        <xpath>/mods:mods/mods:relatedItem[@type='isReferencedBy']/mods:part/mods:text
+        </xpath>
+        <xpath>/mods:mods/mods:relatedItem[@type='isReferencedBy']/mods:titleInfo/mods:title
+        </xpath>
+        <xpath>/mods:mods/mods:relatedItem[@type='constituent']/mods:titleInfo/mods:title
+        </xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>Ownership</name>
+        <xpath>/mods:mods/mods:note[@type='ownership']</xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>TimeNote</name>
+        <xpath>/mods:mods/mods:note[@type='venue']</xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>NoteAcquisition</name>
+        <xpath>/mods:mods/mods:note[@type='acquisition']</xpath>
+    </metadata>
+    <metadata logical="true">
+        <name>NoteLanguage</name>
+        <xpath>/mods:mods/mods:note[@type='language']</xpath>
+    </metadata>
+  <!-- intranda 2024-07-02 -->
+  	<metadata logical="true">
+        <name>Note</name>
+        <xpath>/mods:mods/mods:note[@type='systemDetails']</xpath>
+    </metadata>
+</map>

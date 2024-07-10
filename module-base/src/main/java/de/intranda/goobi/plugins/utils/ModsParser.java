@@ -2,6 +2,8 @@ package de.intranda.goobi.plugins.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -115,25 +117,24 @@ public class ModsParser {
                 setDatePatterns(eleMetadata);
 
                 String mdName = eleMetadata.getChildTextTrim("name", null);
-                if("Person".equals(mdName)) {
-                	List<Element> eleXpathList = eleMetadata.getChildren("xpath", null);
-                	writePersonXPaths(eleXpathList, modsDoc);
-                } else {                	
-                	MetadataType mdType = prefs.getMetadataTypeByName(mdName);
-                	if (mdType != null) {
-                		List<Element> eleXpathList = eleMetadata.getChildren("xpath", null);
-                		if (mdType.getIsPerson()) {
-                			writePersonXPaths(eleXpathList, modsDoc);
-                		} else {
-                			writeMetadataXPaths(eleXpathList, mdType, modsDoc);
-                		}
-                	}
+                if ("Person".equals(mdName)) {
+                    List<Element> eleXpathList = eleMetadata.getChildren("xpath", null);
+                    writePersonXPaths(eleXpathList, modsDoc);
+                } else {
+                    MetadataType mdType = prefs.getMetadataTypeByName(mdName);
+                    if (mdType != null) {
+                        List<Element> eleXpathList = eleMetadata.getChildren("xpath", null);
+                        if (mdType.getIsPerson()) {
+                            writePersonXPaths(eleXpathList, modsDoc);
+                        } else {
+                            writeMetadataXPaths(eleXpathList, mdType, modsDoc);
+                        }
+                    }
                 }
             }
         }
 
     }
-
 
     private void setSeparator(Element eleMetadata) {
         if (eleMetadata.getAttribute("separator") != null) {
@@ -168,7 +169,7 @@ public class ModsParser {
         }
 
         SimpleMatrix<Object> nodeMatrix = new SimpleMatrix<Object>(nodeList);
-//        logger.debug("Created xpath node matrix\n" + nodeMatrix);
+        //        logger.debug("Created xpath node matrix\n" + nodeMatrix);
         SimpleMatrix<Metadata> mdMatrix = convertToMetadataMatrix(nodeMatrix, mdType);
         List<Metadata> mdList = convertToMetadataList(mdMatrix);
 
@@ -323,10 +324,10 @@ public class ModsParser {
             String authorityValue = authorityURI.substring(authorityURI.lastIndexOf("/") + 1);
             authorityURI = authorityURI.substring(0, authorityURI.lastIndexOf("/") + 1);
             String authorityID = eleValue.getAttributeValue("authority");
-            if (authorityID == null) {
-                authorityID = authorityURI.substring(authorityURI.lastIndexOf("/") + 1).replace("/", "").toUpperCase();
+            if (StringUtils.isBlank(authorityID)) {
+                authorityID = Path.of(URI.create(authorityURI).getPath()).getName(0).toString();
             }
-            md.setAutorityFile(authorityID, authorityURI, authorityValue);
+            md.setAuthorityFile(authorityID, authorityURI, authorityValue);
         }
     }
 
@@ -424,7 +425,7 @@ public class ModsParser {
 
         person.setLastname(person.getLastname().replaceAll(ignoreRegex, "").trim());
         person.setFirstname(person.getFirstname().replaceAll(ignoreRegex, "").trim());
-        
+
         if (writeLogical) {
 
             try {
@@ -464,12 +465,12 @@ public class ModsParser {
     }
 
     private void writeMetadata(Metadata metadata) {
-        
+
         metadata.setValue(metadata.getValue().replaceAll(ignoreRegex, "").trim());
-        if(getDatePattern() != null) {
+        if (getDatePattern() != null) {
             metadata.setValue(getFormattedDate(metadata.getValue(), getDateInputPattern(), getDatePattern()));
         }
-        
+
         if (writeLogical) {
 
             try {
@@ -511,53 +512,54 @@ public class ModsParser {
     public static String getFormattedDate(String value, String inputPattern, String outputPattern) {
         String inputSeparatorPattern = "[\\-_/]";
         String outputSeparator = "-";
-        String [] valueParts = value.split(inputSeparatorPattern);
-        if(valueParts.length > 1) {
+        String[] valueParts = value.split(inputSeparatorPattern);
+        if (valueParts.length > 1) {
             StringBuilder partsBuilder = new StringBuilder();
             for (String part : valueParts) {
                 partsBuilder.append(getFormattedDate(part, inputPattern, outputPattern));
                 partsBuilder.append(outputSeparator);
             }
-            return partsBuilder.substring(0, partsBuilder.length()-outputSeparator.length());
+            return partsBuilder.substring(0, partsBuilder.length() - outputSeparator.length());
         } else {
-            try {                
+            try {
                 List<DateTimeParser> inputParsers = new ArrayList<DateTimeParser>();
                 String[] inputPatterns = inputPattern.split("\\|\\|");
                 for (String pattern : inputPatterns) {
-                    if(!pattern.trim().isEmpty()) {
+                    if (!pattern.trim().isEmpty()) {
                         inputParsers.add(DateTimeFormat.forPattern(pattern.trim()).getParser());
                     }
                 }
-                DateTimeFormatter inputFormat = new DateTimeFormatterBuilder().append(null, inputParsers.toArray(new DateTimeParser[inputParsers.size()])).toFormatter();
+                DateTimeFormatter inputFormat =
+                        new DateTimeFormatterBuilder().append(null, inputParsers.toArray(new DateTimeParser[inputParsers.size()])).toFormatter();
                 DateTimeFormatter outputFormat = DateTimeFormat.forPattern(outputPattern);
                 DateTime date = inputFormat.parseDateTime(value.trim());
                 return date.toString(outputFormat);
-            } catch(UnsupportedOperationException | IllegalArgumentException e) {
+            } catch (UnsupportedOperationException | IllegalArgumentException e) {
                 System.out.println(value + " cannot be parsed as date: " + e.getMessage());
                 return value;
             }
         }
     }
-    
-//    protected static String getFormattedDate(String value) {
-//        String [] valueParts = value.split("[/\\-_]");
-//        if(valueParts.length > 1) {
-//            StringBuilder partsBuilder = new StringBuilder();
-//            for (String part : valueParts) {
-//                partsBuilder.append(getFormattedDate(part));
-//                partsBuilder.append("-");
-//            }
-//            return partsBuilder.substring(0, partsBuilder.length()-1);
-//        } else if(value.matches("\\d+") && value.length() == 8){
-//            
-//            DateTimeFormatter inputFormat = DateTimeFormat.forPattern("yyyyMMdd");
-//            DateTimeFormatter outputFormat = DateTimeFormat.forPattern("dd.MM.yyyy");
-//            DateTime date = inputFormat.parseDateTime(value);
-//            return date.toString(outputFormat);
-//        } else {
-//            return value;
-//        }
-//    }
+
+    //    protected static String getFormattedDate(String value) {
+    //        String [] valueParts = value.split("[/\\-_]");
+    //        if(valueParts.length > 1) {
+    //            StringBuilder partsBuilder = new StringBuilder();
+    //            for (String part : valueParts) {
+    //                partsBuilder.append(getFormattedDate(part));
+    //                partsBuilder.append("-");
+    //            }
+    //            return partsBuilder.substring(0, partsBuilder.length()-1);
+    //        } else if(value.matches("\\d+") && value.length() == 8){
+    //            
+    //            DateTimeFormatter inputFormat = DateTimeFormat.forPattern("yyyyMMdd");
+    //            DateTimeFormatter outputFormat = DateTimeFormat.forPattern("dd.MM.yyyy");
+    //            DateTime date = inputFormat.parseDateTime(value);
+    //            return date.toString(outputFormat);
+    //        } else {
+    //            return value;
+    //        }
+    //    }
 
     private static String getElementValue(Element eleValue, String separator) {
         if (separator == null) {
@@ -627,16 +629,15 @@ public class ModsParser {
             mergeXPathInstances = false;
         }
     }
-    
+
     public void setIgnoreRegex(Element ele) {
         String value = ele.getAttributeValue("ignoreRegex");
-        if(value != null) {
+        if (value != null) {
             ignoreRegex = value;
         } else {
             ignoreRegex = "";
         }
     }
-    
 
     public boolean isMergeXPathInstances(Element ele) {
         String value = ele.getAttributeValue("mergeXPathInstances");
@@ -707,7 +708,6 @@ public class ModsParser {
             return null;
         }
     }
-    
 
     public static String determineDocType(Element recordElement, LinkedHashMap<String, Map<String, String>> docTypeMappings, String defaultType) {
         for (Entry<String, Map<String, String>> entry : docTypeMappings.entrySet()) {
@@ -718,37 +718,36 @@ public class ModsParser {
                 String xpath = condition.getKey();
                 String value = condition.getValue();
                 List<Element> list = findElement(xpath, recordElement);
-                if(list.isEmpty()) {
+                if (list.isEmpty()) {
                     match = StringUtils.isBlank(value);
                 } else {
-                    match = list.stream().anyMatch(ele  -> Objects.equals(value, ele.getText()));
+                    match = list.stream().anyMatch(ele -> Objects.equals(value, ele.getText()));
                 }
-                if(!match) {
-                    break;  //leave the loop if no match. In this case mapping doesn't apply and we don't need to check the other conditions
+                if (!match) {
+                    break; //leave the loop if no match. In this case mapping doesn't apply and we don't need to check the other conditions
                 }
             }
-            if(match) {
+            if (match) {
                 return docTypeName;
             }
         }
         return defaultType;
     }
-    
 
     private void setDatePatterns(Element eleMetadata) {
         datePattern = eleMetadata.getAttributeValue("datePattern");
         dateInputPattern = eleMetadata.getAttributeValue("dateInputPattern");
-        
-        if(datePattern != null && dateInputPattern == null) {
+
+        if (datePattern != null && dateInputPattern == null) {
             dateInputPattern = "yyyyMMdd||dd.MM.yyyy||yyyy-MM-dd||dd-MM-yyyy||MM/dd/yyyy||yyyy/MM/dd";
         }
-        
+
     }
 
     public String getDatePattern() {
         return datePattern;
     }
-    
+
     public String getDateInputPattern() {
         return dateInputPattern;
     }
@@ -768,6 +767,5 @@ public class ModsParser {
         }
 
     }
-
 
 }
