@@ -30,6 +30,7 @@ Diese Dateien müssen für den Nutzer `tomcat` lesbar an folgenden Pfaden instal
 Wenn in Goobi nach einem Identifier gesucht wird, wird im Hintergrund eine Anfrage an die in der Datei `goobi_opac.xml` konfigurierte URL gestellt.
 Nach der Abfrage des Datensatzes im MODS-Format erfolgt das Mapping der Metadaten gemäß der in der Datei `mods_map_kalliope.xml` konfigurierten Regeln.
 
+![Auswahl des Plugins](screen1_de.png)
 
 ## Konfiguration
 Die Konfigurationsdatei des Plugins hat folgenden Aufbau:
