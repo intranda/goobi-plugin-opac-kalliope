@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets OBJID="" xsi:schemaLocation="http://www.loc.gov/standards/premis/ http://www.loc.gov/standards/premis/v2/premis-v2-0.xsd http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd http://www.loc.gov/standards/mix/ http://www.loc.gov/standards/mix/mix.xsd" xmlns:mets="http://www.loc.gov/METS/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:goobi="http://meta.goobi.org/v1.5.1/">
+   <mets:metsHdr CREATEDATE="2024-07-10T12:38:36Z">
+      <mets:agent OTHERTYPE="SOFTWARE" ROLE="CREATOR" TYPE="OTHER">
+         <mets:name>Goobi -  - 2024-07-10T12:09:46Z</mets:name>
+         <mets:note>Goobi</mets:note>
+      </mets:agent>
+   </mets:metsHdr>
+   <mets:dmdSec ID="DMDLOG_0000">
+      <mets:mdWrap MDTYPE="MODS">
+         <mets:xmlData>
+            <mods:mods>
+               <mods:extension>
+                  <goobi:goobi>
+                     <goobi:metadata name="CatalogIDDigital">DE-611-HS-4209014</goobi:metadata>
+                     <goobi:metadata name="shelfmarksource">NL Baggesen I, 2.2.16, Nr. 3</goobi:metadata>
+                     <goobi:metadata authority="German ISIL- and Library Codes Agency" authorityURI="http://ld.zdb-services.de/resource/organisations/" name="PhysicalLocation" valueURI="http://ld.zdb-services.de/resource/organisations/DE-8">Universitätsbibliothek Kiel</goobi:metadata>
+                     <goobi:metadata name="TitleDocMain">Brief von Francesco Rosolini an Jens Baggesen</goobi:metadata>
+                     <goobi:metadata authority="iso639-2b" authorityURI="http://id.loc.gov/vocabulary/iso639-2/" name="DocLanguage" valueURI="http://id.loc.gov/vocabulary/iso639-2/ger">ger</goobi:metadata>
+                     <goobi:metadata name="PublicationYearDisplay">20.01.1794</goobi:metadata>
+                     <goobi:metadata authority="gnd" authorityURI="https://d-nb.info/gnd/" name="PlaceOfPublication" valueURI="https://d-nb.info/gnd/4035206-7">Leipzig</goobi:metadata>
+                     <goobi:metadata name="Creator" type="person">
+                        <goobi:lastName>Rosolini</goobi:lastName>
+                        <goobi:firstName>Franceso</goobi:firstName>
+                        <goobi:authorityID>DE-611</goobi:authorityID>
+                        <goobi:authorityURI>https://kalliope-verbund.info/agents/</goobi:authorityURI>
+                        <goobi:authorityValue>36124711</goobi:authorityValue>
+                        <goobi:displayName>Rosolini, Franceso</goobi:displayName>
+                     </goobi:metadata>
+                     <goobi:metadata name="Addressee" type="person">
+                        <goobi:lastName>Baggesen</goobi:lastName>
+                        <goobi:firstName>Jens</goobi:firstName>
+                        <goobi:authorityID>DE-588</goobi:authorityID>
+                        <goobi:authorityURI>https://d-nb.info/gnd/</goobi:authorityURI>
+                        <goobi:authorityValue>118505904</goobi:authorityValue>
+                        <goobi:displayName>Baggesen, Jens</goobi:displayName>
+                     </goobi:metadata>
+                  </goobi:goobi>
+               </mods:extension>
+            </mods:mods>
+         </mets:xmlData>
+      </mets:mdWrap>
+   </mets:dmdSec>
+   <mets:dmdSec ID="DMDPHYS_0000">
+      <mets:mdWrap MDTYPE="MODS">
+         <mets:xmlData>
+            <mods:mods>
+               <mods:extension>
+                  <goobi:goobi>
+                     <goobi:metadata name="shelfmarksource">NL Baggesen I, 2.2.16, Nr. 3</goobi:metadata>
+                     <goobi:metadata authority="German ISIL- and Library Codes Agency" authorityURI="http://ld.zdb-services.de/resource/organisations/" name="PhysicalLocation" valueURI="http://ld.zdb-services.de/resource/organisations/DE-8">Universitätsbibliothek Kiel</goobi:metadata>
+                  </goobi:goobi>
+               </mods:extension>
+            </mods:mods>
+         </mets:xmlData>
+      </mets:mdWrap>
+   </mets:dmdSec>
+   <mets:structMap TYPE="LOGICAL">
+      <mets:div DMDID="DMDLOG_0000" ID="LOG_0000" TYPE="Manuscript"/>
+   </mets:structMap>
+   <mets:structMap TYPE="PHYSICAL">
+      <mets:div DMDID="DMDPHYS_0000" ID="PHYS_0000" TYPE="BoundBook"/>
+   </mets:structMap>
+</mets:mets>
