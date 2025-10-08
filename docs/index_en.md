@@ -3,6 +3,10 @@ title: Kalliope Import
 identifier: goobi-plugin-opac-kalliope
 published: true
 description: OPAC plugin for data transfer from Kalliope
+keywords:
+    - Goobi workflow
+    - Plugin
+    - Opac Plugin
 ---
 ## Introduction
 This documentation describes the installation, configuration and use of the plugin. With the help of this plugin, data from the Kalliope database can be retrieved and transferred to Goobi. To transfer the data, the data from the Kalliope database is retrieved in MODS format and translated into Goobi's data format using a dedicated mapping file.

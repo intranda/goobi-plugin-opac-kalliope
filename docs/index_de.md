@@ -3,6 +3,10 @@ title: Kalliope Import
 identifier: goobi-plugin-opac-kalliope
 published: true
 description: OPAC Plugin für die Datenübernahme aus Kalliope
+keywords:
+    - Goobi workflow
+    - Plugin
+    - Opac Plugin
 ---
 ## Einführung
 Die vorliegende Dokumentation beschreibt die Installation, Konfiguration und den Einsatz des Plugins. Mit Hilfe dieses Plugins können Daten aus dem Datenbestand des Kalliope-Verbundes abgefragt und in Goobi übernommen werden. Zur Übertragung der Daten werden die Daten aus dem Kalliope-Datenbestand im MODS-Format abgefragt und mit einer dezidierten Mapping-Datei ins Datenformat von Goobi übersetzt.
