@@ -9,7 +9,7 @@ keywords:
     - Opac Plugin
 ---
 ## Einführung
-Die vorliegende Dokumentation beschreibt die Installation, Konfiguration und den Einsatz des Plugins. Mit Hilfe dieses Plugins können Daten aus dem Datenbestand des Kalliope-Verbundes abgefragt und in Goobi übernommen werden. Zur Übertragung der Daten werden die Daten aus dem Kalliope-Datenbestand im MODS-Format abgefragt und mit einer dezidierten Mapping-Datei ins Datenformat von Goobi übersetzt.
+Die vorliegende Dokumentation beschreibt die Installation, Konfiguration und den Einsatz des Plugins. Mit Hilfe dieses Plugins können Daten aus dem Datenbestand des Kalliope-Verbundes abgefragt und in Goobi übernommen werden. Zur Übertragung der Daten werden die Daten aus dem Kalliope-Datenbestand im MODS-Format abgefragt und mit einer dedizierten Mapping-Datei ins Datenformat von Goobi übersetzt.
 
 
 ## Installation
